@@ -86,6 +86,20 @@ namespace WalletManager.Controllers
             return Json(true);
         }
 
+        public IActionResult Test1()
+        {
+            return View();
+        }
+
+        public IActionResult Test2()
+        {
+            return View();
+        }
+
+        public IActionResult Test3()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {
