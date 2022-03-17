@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WalletManager.Data;
+using WalletManager.Services;
 
 namespace WalletManager
 {
@@ -44,6 +45,8 @@ namespace WalletManager
                 option.AccessDeniedPath = "/index";
                 option.LoginPath = "/index";
             });
+
+            services.AddTransient<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
