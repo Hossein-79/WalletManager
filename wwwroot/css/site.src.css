@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .input {
+        @apply w-full transition-colors bg-transparent border border-gray-300 dark:border-neutral-500 rounded-lg placeholder-shown:font-light focus:ring-1 focus:border-blue-400 focus:ring-blue-400 focus:outline-none px-4 py-3;
+    }
+    .input-wrapper {
+        @apply relative mb-2;
+    }
+    .input-wrapper .input {
+        @apply pr-10;
+    }
+    .input-wrapper .input-icon {
+        @apply absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-300 dark:text-neutral-500;
+    }
+    .input-wrapper .input-icon .icon {
+        @apply h-6 w-6;
+    }
+    .btn {
+        @apply bg-sky-500 text-white font-normal rounded-lg transition-colors px-4 py-3;
+    }
+    .btn:hover {
+        @apply bg-sky-600;
+    }
+    .btn:active {
+        @apply outline-none bg-sky-700;
+    }
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
