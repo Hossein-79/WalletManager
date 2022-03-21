@@ -15,5 +15,7 @@ namespace WalletManager.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Chain> Chains { get; set; }
+        public DbSet<WalletAddress> WalletAddresses { get; set; }
     }
 }

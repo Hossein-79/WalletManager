@@ -5,7 +5,7 @@ namespace WalletManager.Services
 {
     public interface IUserService
     {
-        Task AddUser(User user);
+        Task Add(User user);
         Task<User> GetUser(int useId);
         Task<User> GetUser(string name);
     }

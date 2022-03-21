@@ -17,7 +17,7 @@ namespace WalletManager.Services
             _context = walletManagerContext;
         }
 
-        public async Task AddUser(User user)
+        public async Task Add(User user)
         {
             await _context.AddAsync(user);
             await _context.SaveChangesAsync();
