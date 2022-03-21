@@ -1,0 +1,23 @@
+{
+  "name": "walletmanager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "css": "npx tailwindcss -i ./wwwroot/css/site.src.css -o ./wwwroot/css/site.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hossein-79/WalletManager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hossein-79/WalletManager/issues"
+  },
+  "homepage": "https://github.com/Hossein-79/WalletManager#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.0.23"
+  }
+}

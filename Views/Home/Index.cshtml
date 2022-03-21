@@ -2,7 +2,40 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="flex flex-col justify-between lg:grid grid-cols-3 grid-rows-3 min-h-screen p-7 lg:p-0">
+    <div class="col-start-1 col-end-2 row-start-1 row-end-2 lg:flex justify-center items-center mt-5">
+        <a href="/">
+            <svg role="img" class="h-10 w-52 text-slate-600 dark:text-slate-100">
+                <use xlink:href="img/sprite.svg#logotype"></use>
+            </svg>
+        </a>
+    </div>
+    <div class="flex flex-col lg:justify-end col-start-2 col-end-4 row-start-1 row-end-4 font-light lg:bg-indigo-300 lg:rounded-2xl mx-5 lg:my-7 lg:mr-7 lg:ml-0 lg:p-20">
+        <h2 class="text-4xl leading-normal lg:text-white lg:w-1/2 mb-4">
+            Take your crypto stalking to the next level 😉
+        </h2>
+        <span class="text-xl leading-8 text-gray-600 lg:text-gray-100 lg:w-1/3">
+            Keep a watch on wallet addresses
+        </span>
+    </div>
+    <form action="" class="flex flex-col justify-end col-start-1 col-end-2 row-start-2 row-end-4 bg-white dark:bg-neutral-700 lg:bg-transparent rounded-2xl shadow-sm lg:shadow-none p-5 lg:px-12 lg:pb-20">
+        <h2 class="text-center mb-5">Login or Register</h2>
+        <div class="input-wrapper">
+            <input type="text" class="input" name="" id="" placeholder="Username" autocapitalize="off" autocomplete="username" required>
+            <div class="input-icon">
+                <svg role="img" class="icon">
+                    <use xlink:href="img/sprite.svg#icon-user"></use>
+                </svg>
+            </div>
+        </div>
+        <div class="input-wrapper">
+            <input type="password" class="input" name="" id="" placeholder="Password" autocomplete="current-password" required>
+            <div class="input-icon">
+                <svg role="img" class="icon">
+                    <use xlink:href="img/sprite.svg#icon-lock"></use>
+                </svg>
+            </div>
+        </div>
+        <button type="submit" class="btn mt-2">Submit</button>
+    </form>
 </div>
