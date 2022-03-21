@@ -30,7 +30,7 @@ namespace WalletManager.Controllers
             _chainService = chainService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
@@ -90,6 +90,31 @@ namespace WalletManager.Controllers
             return Json(true);
         }
 
+        public async Task<IActionResult> AddressBalance(string address, string chainId)
+        {
+            var balances = await _covalentService.GetAddressBalance(address, chainId);
+            return Json(balances);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllChains()
+        {
+            // Get Chains from API
+            //var chains = await _covalentService.GetAllChain();
+            //foreach (var item in chains)
+            //{
+            //    var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
+            //    if (chain is null)
+            //    {
+            //        await _chainService.Add(item);
+            //    }
+            //}
+
+            // Get Chains from database
+            var chains = await _chainService.GetAllChains();
+            return Json(chains);
+        }
+
         public IActionResult Test1()
         {
             return View();
@@ -108,24 +133,6 @@ namespace WalletManager.Controllers
         public IActionResult Privacy()
         {
             return View();
-        }
-
-        public async Task<IActionResult> GetAllChains()
-        {
-            // Get Chains from API
-            //var chains = await _covalentService.GetAllChain();
-            //foreach (var item in chains)
-            //{
-            //    var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
-            //    if (chain is null)
-            //    {
-            //        await _chainService.Add(item);
-            //    }
-            //}
-
-            // Get Chains from database
-            var chains = await _chainService.GetAllChains();
-            return Json(chains);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

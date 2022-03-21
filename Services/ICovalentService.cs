@@ -6,6 +6,7 @@ namespace WalletManager.Services
 {
     public interface ICovalentService
     {
+        Task<IEnumerable<Balance>> GetAddressBalance(string address, string chainId);
         Task<IEnumerable<Chain>> GetAllChain();
     }
 }
