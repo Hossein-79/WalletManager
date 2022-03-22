@@ -20,31 +20,22 @@ namespace WalletManager.Controllers
         private readonly IUserService _userService;
         private readonly ICovalentService _covalentService;
         private readonly IChainService _chainService;
+        private readonly IWalletAddressService _walletAddressService;
 
-
-        public HomeController(ILogger<HomeController> logger, IUserService userService, ICovalentService covalentService, IChainService chainService)
+        public HomeController(ILogger<HomeController> logger, IUserService userService, ICovalentService covalentService, IChainService chainService, IWalletAddressService walletAddressService)
         {
             _logger = logger;
             _userService = userService;
             _covalentService = covalentService;
             _chainService = chainService;
+            _walletAddressService = walletAddressService;
         }
 
         public async Task<IActionResult> Index()
         {
             return View();
         }
-
-        public IActionResult Login()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                //return RedirectToAction(nameof(Wallet));
-            }
-            return View();
-        }
-
-        [HttpPost]
+        
         public async Task<IActionResult> Login(string name, string password)
         {
             if (User.Identity.IsAuthenticated)
@@ -56,8 +47,7 @@ namespace WalletManager.Controllers
 
             if (name == null || password == null)
             {
-                ViewBag.Errors = "Please enter username and password.";
-                return View();
+                return Json("Please enter username and password.");
             }
 
             if (user == null)
@@ -71,8 +61,7 @@ namespace WalletManager.Controllers
             }
             else if (user.Password != password.Sha256())
             {
-                ViewBag.Errors = "incorrect password";
-                return View();
+                return Json("incorrect password");
             }
 
             var identity = new ClaimsIdentity(new[]{
@@ -87,7 +76,7 @@ namespace WalletManager.Controllers
                 ExpiresUtc = DateTime.UtcNow.AddYears(1)
             });
 
-            return Json(true);
+            return Json("Success");
         }
 
         public async Task<IActionResult> AddressBalance(string address, string chainId)
@@ -96,7 +85,32 @@ namespace WalletManager.Controllers
             return Json(balances);
         }
 
-        [HttpGet]
+        public async Task<IActionResult> AddAddress(string address, int chainId, string lable)
+        {
+            var user = await _userService.GetUser(User.Identity.Name);
+            var chain = await _chainService.GetChain(chainId);
+
+            if (user is null)
+                return Json(false);
+
+            if (chain is null)
+                return Json(false);
+
+            var walletAddress = new WalletAddress()
+            {
+                Address = address,
+                UserId = user.UserId,
+                ChainId = chain.ChainId,
+                Lable = lable,
+            };
+
+            await _walletAddressService.Add(walletAddress);
+
+            var balances = await _covalentService.GetAddressBalance(address, chain.CovalentId);
+
+            return Json(balances);
+        }
+
         public async Task<IActionResult> GetAllChains()
         {
             // Get Chains from API
