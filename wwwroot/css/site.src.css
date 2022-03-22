@@ -8,6 +8,9 @@
     .input {
         @apply w-full transition-colors bg-transparent border border-gray-300 dark:border-neutral-500 rounded-lg placeholder-shown:font-light focus:ring-1 focus:border-blue-400 focus:ring-blue-400 focus:outline-none px-4 py-3;
     }
+    .input:disabled {
+        @apply bg-neutral-200 dark:bg-neutral-600;
+    }
     .input-wrapper {
         @apply relative mb-2;
     }
@@ -17,17 +20,44 @@
     .input-wrapper .input-icon {
         @apply absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-300 dark:text-neutral-500;
     }
+    .input-wrapper:focus-within .input-icon {
+        @apply text-blue-500;
+    }
     .input-wrapper .input-icon .icon {
         @apply h-6 w-6;
     }
     .btn {
-        @apply bg-sky-500 text-white font-normal rounded-lg transition-colors px-4 py-3;
+        @apply relative bg-sky-500 text-white font-normal rounded-lg transition-colors px-4 py-3;
     }
     .btn:hover {
         @apply bg-sky-600;
     }
     .btn:active {
         @apply outline-none bg-sky-700;
+    }
+    .btn:disabled {
+        @apply bg-neutral-400 dark:bg-neutral-600;
+    }
+    .btn .loader {
+        @apply absolute inset-y-0 right-0 left-0;
+    }
+    .btn:not(.loading) .loader {
+        @apply hidden;
+    }
+    .btn.loading .text {
+        @apply invisible;
+    }
+    .btn.loading .loader {
+        @apply flex justify-center items-center;
+    }
+    .alert {
+        @apply text-white font-normal text-sm rounded-lg px-4 py-3;
+    }
+    .alert.alert-error {
+        @apply bg-rose-400;
+    }
+    .alert.alert-success {
+        @apply bg-green-400;
     }
 }
 
