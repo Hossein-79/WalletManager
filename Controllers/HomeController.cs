@@ -35,7 +35,7 @@ namespace WalletManager.Controllers
         {
             return View();
         }
-        
+
         public async Task<IActionResult> Login(string name, string password)
         {
             if (User.Identity.IsAuthenticated)
@@ -47,7 +47,7 @@ namespace WalletManager.Controllers
 
             if (name == null || password == null)
             {
-                return Json("Please enter username and password.");
+                return Json(new { Success = false, Message = "Please enter username and password." });
             }
 
             if (user == null)
@@ -61,7 +61,7 @@ namespace WalletManager.Controllers
             }
             else if (user.Password != password.Sha256())
             {
-                return Json("incorrect password");
+                return Json(new { Success = false, Message = "incorrect password" });
             }
 
             var identity = new ClaimsIdentity(new[]{
@@ -76,13 +76,13 @@ namespace WalletManager.Controllers
                 ExpiresUtc = DateTime.UtcNow.AddYears(1)
             });
 
-            return Json("Success");
+            return Json(new { Success = true, Message = "Login Successful" });
         }
 
         public async Task<IActionResult> AddressBalance(string address, string chainId)
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
-            return Json(balances);
+            return Json(new { Success = true, Message = balances });
         }
 
         public async Task<IActionResult> AddAddress(string address, int chainId, string lable)
@@ -91,10 +91,10 @@ namespace WalletManager.Controllers
             var chain = await _chainService.GetChain(chainId);
 
             if (user is null)
-                return Json(false);
+                return Json(new { Success = false, Message = "User not found." });
 
             if (chain is null)
-                return Json(false);
+                return Json(new { Success = false, Message = "blockChain not found." });
 
             var walletAddress = new WalletAddress()
             {
@@ -107,8 +107,7 @@ namespace WalletManager.Controllers
             await _walletAddressService.Add(walletAddress);
 
             var balances = await _covalentService.GetAddressBalance(address, chain.CovalentId);
-
-            return Json(balances);
+            return Json(new { Success = true, Message = balances });
         }
 
         public async Task<IActionResult> GetAllChains()
@@ -126,7 +125,7 @@ namespace WalletManager.Controllers
 
             // Get Chains from database
             var chains = await _chainService.GetAllChains();
-            return Json(chains);
+            return Json(new { Success = true, Message = chains });
         }
 
         public IActionResult Test1()
