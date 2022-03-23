@@ -50,6 +50,12 @@
     .btn.loading .loader {
         @apply flex justify-center items-center;
     }
+    .btn-icon {
+        @apply relative bg-transparent rounded-2xl transition-colors p-2;
+    }
+    .btn-icon:hover {
+        @apply bg-neutral-400 dark:bg-neutral-600;
+    }
     .alert {
         @apply text-white font-normal text-sm rounded-lg px-4 py-3;
     }
@@ -58,6 +64,18 @@
     }
     .alert.alert-success {
         @apply bg-green-400;
+    }
+    .modal {
+        @apply fixed top-0 right-0 bottom-0 left-0 bg-black/30 dark:bg-white/30 backdrop-blur flex flex-col justify-end overflow-y-auto p-4;
+    }
+    .modal .modal-body {
+        @apply rounded-lg bg-white dark:bg-neutral-700 p-4;
+    }
+    .modal .modal-body .modal-header {
+        @apply flex justify-between items-center text-sm mb-4;
+    }
+    .divider {
+        @apply border-neutral-300 dark:border-neutral-500 my-4;
     }
 }
 

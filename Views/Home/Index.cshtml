@@ -1,13 +1,13 @@
 ﻿@{
     Layout = "_HomeLayout";
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Follow wallet addresses accross chains, all in one place";
 }
 @* Check if user is authenticated *@
 <div class="flex flex-col justify-between lg:grid grid-cols-3 grid-rows-3 min-h-screen p-7 lg:p-0">
     <div class="col-start-1 col-end-2 row-start-1 row-end-2 lg:flex justify-center items-center mt-5">
         <a href="/">
             <svg role="img" class="h-10 w-52 text-slate-600 dark:text-slate-100">
-                <use xlink:href="img/sprite.svg#logotype"></use>
+                <use xlink:href="/img/sprite.svg#logotype"></use>
             </svg>
         </a>
     </div>
@@ -25,7 +25,7 @@
             <input type="text" id="username-input" class="input" name="" id="" placeholder="Username" autocapitalize="off" autocomplete="username" required>
             <div class="input-icon">
                 <svg role="img" class="icon">
-                    <use xlink:href="img/sprite.svg#icon-user"></use>
+                    <use xlink:href="/img/sprite.svg#icon-user"></use>
                 </svg>
             </div>
         </div>
@@ -33,14 +33,14 @@
             <input type="password" id="password-input" class="input" name="" id="" placeholder="Password" autocomplete="current-password" required>
             <div class="input-icon">
                 <svg role="img" class="icon">
-                    <use xlink:href="img/sprite.svg#icon-lock"></use>
+                    <use xlink:href="/img/sprite.svg#icon-lock"></use>
                 </svg>
             </div>
         </div>
         <button type="submit" id="submit-btn" class="btn mt-2">
             <div class="loader">
                 <svg role="img" class="animate-spin w-6 h-6">
-                    <use xlink:href="img/sprite.svg#icon-loader"></use>
+                    <use xlink:href="/img/sprite.svg#icon-loader"></use>
                 </svg>
             </div>
             <span class="text">Submit</span>
