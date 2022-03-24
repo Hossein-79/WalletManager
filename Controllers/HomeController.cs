@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -127,6 +128,17 @@ namespace WalletManager.Controllers
             var chains = await _chainService.GetAllChains();
             return Json(new { Success = true, Message = chains });
         }
+
+        [Authorize]
+        public async Task<IActionResult> Dashboard()
+        {
+            var user = await _userService.GetUser(User.Identity.Name);
+            var address = await _walletAddressService.GetUserWallets(user.UserId);
+
+            return View(address);
+        }
+
+
 
         public IActionResult Test1()
         {

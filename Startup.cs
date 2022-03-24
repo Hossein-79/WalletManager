@@ -77,6 +77,10 @@ namespace WalletManager
             {
                 endpoints.MapControllerRoute(
                     name: "default",
+                    defaults: new { controller = "Home", action = "Index" },
+                    pattern: "{action}/{id?}");
+                endpoints.MapControllerRoute(
+                    name: "route",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
