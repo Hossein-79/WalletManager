@@ -32,17 +32,22 @@ namespace WalletManager.Controllers
             _walletAddressService = walletAddressService;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(nameof(Dashboard));
+            }
+
             return View();
         }
 
         public async Task<IActionResult> Login(string name, string password)
         {
-            if (User.Identity.IsAuthenticated)
-            {
-                //return RedirectToAction(nameof(Wallet));
-            }
+            //if (User.Identity.IsAuthenticated)
+            //{
+            //    return RedirectToAction(nameof(Dashboard));
+            //}
 
             var user = await _userService.GetUser(name);
 
@@ -86,6 +91,13 @@ namespace WalletManager.Controllers
             return Json(new { Success = true, Message = balances });
         }
 
+        public async Task<IActionResult> AddressBalancePartial(string address, string chainId)
+        {
+            var balances = await _covalentService.GetAddressBalance(address, chainId);
+            return PartialView("_AddressBalancePartial", new { Success = true, Message = balances });
+        }
+
+        [Authorize]
         public async Task<IActionResult> AddAddress(string address, int chainId, string lable)
         {
             var user = await _userService.GetUser(User.Identity.Name);
@@ -111,18 +123,21 @@ namespace WalletManager.Controllers
             return Json(new { Success = true, Message = balances });
         }
 
-        public async Task<IActionResult> GetAllChains()
+        public async Task<IActionResult> GetAllChains(bool update = false)
         {
             // Get Chains from API
-            //var chains = await _covalentService.GetAllChain();
-            //foreach (var item in chains)
-            //{
-            //    var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
-            //    if (chain is null)
-            //    {
-            //        await _chainService.Add(item);
-            //    }
-            //}
+            if (update)
+            {
+                var allChains = await _covalentService.GetAllChain();
+                foreach (var item in allChains)
+                {
+                    var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
+                    if (chain is null)
+                    {
+                        await _chainService.Add(item);
+                    }
+                }
+            }
 
             // Get Chains from database
             var chains = await _chainService.GetAllChains();
@@ -137,8 +152,6 @@ namespace WalletManager.Controllers
 
             return View(address);
         }
-
-
 
         public IActionResult Test1()
         {
