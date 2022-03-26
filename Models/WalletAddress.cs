@@ -15,7 +15,7 @@ namespace WalletManager.Models
 
         public string Address { get; set; }
 
-        public string Lable { get; set; }
+        public string Label { get; set; }
 
         public User User { get; set; }
 

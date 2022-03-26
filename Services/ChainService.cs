@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WalletManager.Data;
@@ -28,7 +29,7 @@ namespace WalletManager.Services
         public async Task<Chain> GetChainByCovalentId(string covalentId) =>
             await _context.Chains.Where(u => u.CovalentId == covalentId).FirstOrDefaultAsync();
 
-        public async Task<IEnumerable> GetAllChains(bool testnet = false)
+        public async Task<IEnumerable<Chain>> GetAllChains(bool testnet = false)
         {
             if (testnet)
                 return await _context.Chains.ToListAsync();

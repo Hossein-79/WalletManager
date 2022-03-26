@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using WalletManager.Helpers;
 using WalletManager.Models;
+using WalletManager.Models.ViewModel;
 using WalletManager.Services;
 
 namespace WalletManager.Controllers
@@ -114,7 +115,7 @@ namespace WalletManager.Controllers
                 Address = address,
                 UserId = user.UserId,
                 ChainId = chain.ChainId,
-                Lable = lable,
+                Label = lable,
             };
 
             await _walletAddressService.Add(walletAddress);
@@ -126,18 +127,18 @@ namespace WalletManager.Controllers
         public async Task<IActionResult> GetAllChains(bool update = false)
         {
             // Get Chains from API
-            if (update)
-            {
-                var allChains = await _covalentService.GetAllChain();
-                foreach (var item in allChains)
-                {
-                    var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
-                    if (chain is null)
-                    {
-                        await _chainService.Add(item);
-                    }
-                }
-            }
+            //if (update)
+            //{
+            //    var allChains = await _covalentService.GetAllChain();
+            //    foreach (var item in allChains)
+            //    {
+            //        var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
+            //        if (chain is null)
+            //        {
+            //            await _chainService.Add(item);
+            //        }
+            //    }
+            //}
 
             // Get Chains from database
             var chains = await _chainService.GetAllChains();
@@ -148,9 +149,13 @@ namespace WalletManager.Controllers
         public async Task<IActionResult> Dashboard()
         {
             var user = await _userService.GetUser(User.Identity.Name);
-            var address = await _walletAddressService.GetUserWallets(user.UserId);
+            var model = new DashboardViewModel()
+            {
+                Addresses = await _walletAddressService.GetUserWallets(user.UserId),
+                Chains = await _chainService.GetAllChains(),
+            };
 
-            return View(address);
+            return View(model);
         }
 
         public IActionResult Test1()
