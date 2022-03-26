@@ -47,7 +47,7 @@ namespace WalletManager.Services
             }
         }
 
-        private class GetWalletBalance
+        private class GetWalletBalanceResponse
         {
             public Data data { get; set; }
             public bool error { get; set; }
@@ -82,6 +82,42 @@ namespace WalletManager.Services
                 public float quote { get; set; }
                 public float quote_24h { get; set; }
                 public object nft_data { get; set; }
+            }
+
+        }
+
+        private class GetPriceResponse
+        {
+            public Data data { get; set; }
+            public bool error { get; set; }
+            public object error_message { get; set; }
+            public object error_code { get; set; }
+
+            public class Data
+            {
+                public string updated_at { get; set; }
+                public Item[] items { get; set; }
+                public Pagination pagination { get; set; }
+            }
+
+            public class Pagination
+            {
+                public bool has_more { get; set; }
+                public int page_number { get; set; }
+                public int page_size { get; set; }
+                public int total_count { get; set; }
+            }
+
+            public class Item
+            {
+                public int contract_decimals { get; set; }
+                public string contract_name { get; set; }
+                public string contract_ticker_symbol { get; set; }
+                public string contract_address { get; set; }
+                public object supports_erc { get; set; }
+                public string logo_url { get; set; }
+                public decimal quote_rate { get; set; }
+                public int rank { get; set; }
             }
 
         }
@@ -128,11 +164,9 @@ namespace WalletManager.Services
                 var response = await _client.GetAsync($"{chainId}/address/{address}/balances_v2/?quote-currency=USD&format=JSON&nft=false&no-nft-fetch=false&key={_apiKey}");
                 var content = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine(content);
-
                 if (response.IsSuccessStatusCode)
                 {
-                    var deserialize = JsonSerializer.Deserialize<GetWalletBalance>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                    var deserialize = JsonSerializer.Deserialize<GetWalletBalanceResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                     var balances = new List<Balance>();
 
@@ -157,6 +191,29 @@ namespace WalletManager.Services
                 throw;
             }
             return null;
+        }
+
+        public async Task<decimal> GetPrice(string symbol)
+        {
+            try
+            {
+                var response = await _client.GetAsync($"pricing/tickers/?quote-currency=USD&format=JSON&tickers={symbol}&page-number=&key={_apiKey}");
+                var content = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine(content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var deserialize = JsonSerializer.Deserialize<GetPriceResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    return deserialize.data.items.OrderBy(u => u.rank).FirstOrDefault().quote_rate;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return 0;
         }
     }
 }

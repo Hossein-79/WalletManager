@@ -8,5 +8,6 @@ namespace WalletManager.Services
     {
         Task<IEnumerable<Balance>> GetAddressBalance(string address, string chainId);
         Task<IEnumerable<Chain>> GetAllChain();
+        Task<decimal> GetPrice(string symbol);
     }
 }

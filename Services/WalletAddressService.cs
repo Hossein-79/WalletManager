@@ -27,6 +27,6 @@ namespace WalletManager.Services
             await _context.WalletAddresses.Where(u => u.WalletAddressId == id).FirstOrDefaultAsync();
 
         public async Task<IEnumerable<WalletAddress>> GetUserWallets(int userId) =>
-            await _context.WalletAddresses.Where(u => u.UserId == userId).ToListAsync();
+            await _context.WalletAddresses.Where(u => u.UserId == userId).Include(u => u.Chain).ToListAsync();
     }
 }
