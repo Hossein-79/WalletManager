@@ -93,7 +93,26 @@
         @apply border-neutral-300 dark:border-neutral-500 my-4;
     }
     .list-child {
-        @apply border-l border-r px-5 py-3;
+        @apply block border-l border-r border-neutral-300 dark:border-neutral-500 w-full select-none transition-colors px-3 py-3;
+    }
+    .list-child:hover {
+        @apply bg-neutral-100/50 dark:bg-neutral-600/50;
+    }
+    .list-child:active {
+        @apply bg-neutral-100 dark:bg-neutral-600/75;
+    }
+    .list-child.active {
+        @apply bg-sky-500/10 text-sky-500;
+    }
+    .list-child:not(.active) .arrow-icon {
+        @apply text-neutral-400 dark:text-neutral-400;
+    }
+    .list-child .arrow-icon {
+        @apply transition-transform;
+    }
+    .list-child:hover .arrow-icon,
+    .list-child.active .arrow-icon {
+        @apply translate-x-1;
     }
     .list-child:first-child {
         @apply border-t rounded-t-lg;
