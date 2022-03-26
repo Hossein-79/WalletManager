@@ -92,6 +92,18 @@
     .divider {
         @apply border-neutral-300 dark:border-neutral-500 my-4;
     }
+    .list-child {
+        @apply border-l border-r px-5 py-3;
+    }
+    .list-child:first-child {
+        @apply border-t rounded-t-lg;
+    }
+    .list-child:last-child {
+        @apply border-b rounded-b-lg;
+    }
+    .list-child + .list-child {
+        @apply border-t;
+    }
 }
 
 html {

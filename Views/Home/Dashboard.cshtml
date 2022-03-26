@@ -1,0 +1,138 @@
+@model IEnumerable<WalletAddress>
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<div class="lg:grid lg:grid-cols-4 lg:h-screen">
+    <section class="lg:col-start-1 lg:col-end-2 lg:flex lg:flex-col lg:bg-white lg:dark:bg-neutral-700 lg:shadow-sm">
+        @* DESKTOP LOGO *@
+        <header class="hidden lg:block border-b border-neutral-300 dark:border-neutral-500 px-4 py-6">
+            <a href="/">
+                <svg role="img" class="h-8 w-44 text-slate-600 dark:text-slate-100">
+                    <use xlink:href="/img/sprite.svg#logotype"></use>
+                </svg>
+            </a>
+        </header>
+        @* PAGE CONTENT *@
+        <div class="flex flex-col rounded-lg bg-white dark:bg-neutral-700 lg:bg-transparent lg:dark:bg-transparent lg:flex-grow p-4">
+            <div class="flex justify-between items-center text-sm mb-4">
+                <h2>Wallet Addresses</h2>
+                <button type="button" class="btn btn-sm hidden lg:flex items-center" data-modal="add-address-modal">
+                    <svg role="img" class="w-4 h-4 mr-1">
+                        <use xlink:href="/img/sprite.svg#icon-plus"></use>
+                    </svg>
+                    <span class="text">Add New</span>
+                </button>
+            </div>
+            <div class="flex flex-col lg:flex-grow">
+                @if(Model.Count() > 0)
+                {
+                    <div>
+                        @foreach (var address in Model)
+                        {
+                            @await Html.PartialAsync("~/Views/Shared/_AddressListItemPartial.cshtml", address);
+                        }
+                    </div>
+                }
+                else
+                {
+                    @* EMPTY STATE *@
+                    <div class="flex flex-col items-center border border-dashed border-neutral-300 dark:border-neutral-500 lg:border-0 text-neutral-400 text-center text-sm rounded-lg py-10 my-auto">
+                        This List is Empty!
+                        <button class="hidden lg:block text-sky-500 hover:text-sky-600 active:text-sky-600/75 mt-4" type="button" data-modal="add-address-modal">
+                            <span>Add New Address</span>
+                        </button>
+                    </div>
+                }
+            </div>
+            <div class="lg:hidden mt-4">
+                <button class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75" type="button" data-modal="add-address-modal">
+                    <svg role="img" class="h-5 w-5 mr-2">
+                        <use xlink:href="/img/sprite.svg#icon-plus"></use>
+                    </svg>
+                    <span>Add New Address</span>
+                </button>
+            </div>
+        </div>
+        @* DESKTOP SETTINGS *@
+        <footer class="hidden lg:block bg-neutral-100 dark:bg-neutral-600 p-4">
+            <div>
+                <div class="grid grid-cols-2 gap-5">
+                    <div>
+                        <input type="radio" name="dark-mode-desktop" id="dark-mode-desktop-light" class="light-mode peer hidden">
+                        <label for="dark-mode-desktop-light" class="block transition-colors rounded-lg cursor-pointer hover:bg-neutral-500/5 border border-neutral-300 text-neutral-300 dark:text-neutral-500 dark:border-neutral-500 peer-checked:border-sky-500 peer-checked:text-sky-500 peer-checked:bg-sky-500/10 p-5">
+                            <svg role="img" class="h-5 w-5 mx-auto">
+                                <use xlink:href="/img/sprite.svg#icon-sun"></use>
+                            </svg>
+                        </label>
+                    </div>
+                    <div>
+                        <input type="radio" name="dark-mode-desktop" id="dark-mode-desktop-dark" class="dark-mode peer hidden">
+                        <label for="dark-mode-desktop-dark" class="block transition-colors rounded-lg cursor-pointer hover:bg-neutral-500/5 border border-neutral-300 text-neutral-300 dark:text-neutral-500 dark:border-neutral-500 peer-checked:border-sky-500 peer-checked:text-sky-500 peer-checked:bg-sky-500/10 p-5">
+                            <svg role="img" class="h-5 w-5 mx-auto">
+                                <use xlink:href="/img/sprite.svg#icon-moon"></use>
+                            </svg>
+                        </label>
+                    </div>
+                </div>
+                <hr class="divider">
+                <a href="/logout" class="flex items-center">
+                    <svg role="img" class="h-5 w-5 mr-2">
+                        <use xlink:href="/img/sprite.svg#icon-logout"></use>
+                    </svg>
+                    <span>
+                        Sign Out of Account
+                    </span>
+                </a>
+            </div>
+        </footer>
+    </section>
+    <section class="hidden lg:flex flex-col lg:col-start-2 lg:col-end-5">
+        @* EMPTY STATE *@
+        <div class="text-neutral-500 dark:text-neutral-400 m-auto">
+            Pick an address to see some magic.
+        </div>
+    </section>
+</div>
+@* MODALS *@
+<div class="modal" id="add-address-modal">
+    <div class="modal-body">
+        <div class="modal-header">
+            <h2>Add New Address</h2>
+            <button type="button" class="btn-icon modal-close">
+                <svg role="img" class="h-5 w-5">
+                    <use xlink:href="/img/sprite.svg#icon-x"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="flex flex-col">
+            <div class="input-wrapper">
+                <input type="text" id="address-input" class="input" placeholder="Wallet Address" autocapitalize="off" autocomplete="off" required>
+            </div>
+            <div class="input-wrapper">
+                <select id="network-select" class="input input-select">
+                    <option value="mainnet" selected>Ethereum</option>
+                    <option value="testnet">Polygon</option>
+                </select>
+                <div class="input-icon">
+                    <svg role="img" class="icon">
+                        <use xlink:href="/img/sprite.svg#icon-chevron-down"></use>
+                    </svg>
+                </div>
+            </div>
+            <button class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75 my-3" type="button">
+                <svg role="img" class="h-5 w-5 mr-2">
+                    <use xlink:href="/img/sprite.svg#icon-plus"></use>
+                </svg>
+                <span>Use sample address</span>
+            </button>
+            <button type="submit" id="address-submit-btn" class="btn mt-2">
+                <div class="loader">
+                    <svg role="img" class="animate-spin w-6 h-6">
+                        <use xlink:href="/img/sprite.svg#icon-loader"></use>
+                    </svg>
+                </div>
+                <span class="text">Check Address</span>
+            </button>
+        </div>
+    </div>
+</div>
