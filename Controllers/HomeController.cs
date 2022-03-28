@@ -86,6 +86,13 @@ namespace WalletManager.Controllers
             return Json(new { Success = true, Message = "Login Successful" });
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> AddressBalance(string address, string chainId)
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
@@ -126,22 +133,23 @@ namespace WalletManager.Controllers
 
         public async Task<IActionResult> GetAllChains(bool update = false)
         {
-            // Get Chains from API
-            //if (update)
-            //{
-            //    var allChains = await _covalentService.GetAllChain();
-            //    foreach (var item in allChains)
-            //    {
-            //        var chain = await _chainService.GetChainByCovalentId(item.CovalentId);
-            //        if (chain is null)
-            //        {
-            //            await _chainService.Add(item);
-            //        }
-            //    }
-            //}
+            //Get Chains from API
+            var chains = await _chainService.GetAllChains();
+            
+            if (update || chains is null)
+            {
+                var allChains = await _covalentService.GetAllChain();
+                foreach (var item in allChains)
+                {
+                    if (!chains.Contains(item))
+                    {
+                        await _chainService.Add(item);
+                        chains.Append(item);
+                    }
+                }
+            }
 
             // Get Chains from database
-            var chains = await _chainService.GetAllChains();
             return Json(new { Success = true, Message = chains });
         }
 
