@@ -23,14 +23,16 @@ namespace WalletManager.Controllers
         private readonly ICovalentService _covalentService;
         private readonly IChainService _chainService;
         private readonly IWalletAddressService _walletAddressService;
+        private readonly ICoinPriceService _coinPriceService;
 
-        public HomeController(ILogger<HomeController> logger, IUserService userService, ICovalentService covalentService, IChainService chainService, IWalletAddressService walletAddressService)
+        public HomeController(ILogger<HomeController> logger, ICoinPriceService coinPriceService, IUserService userService, ICovalentService covalentService, IChainService chainService, IWalletAddressService walletAddressService)
         {
             _logger = logger;
             _userService = userService;
             _covalentService = covalentService;
             _chainService = chainService;
             _walletAddressService = walletAddressService;
+            _coinPriceService = coinPriceService;
         }
 
         public IActionResult Index()
@@ -96,12 +98,60 @@ namespace WalletManager.Controllers
         public async Task<IActionResult> AddressBalance(string address, string chainId)
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
-            return Json(new { Success = true, Message = balances });
+
+            foreach (var item in balances)
+            {
+                item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
+
+                if (item.CoinPrice is null)
+                {
+                    var price = await _covalentService.GetPrice(item.Symbol);
+
+                    if (price != 0)
+                    {
+                        var coinPrice = new CoinPrice
+                        {
+                            Symbol = item.Symbol,
+                            Price = price,
+                            ContractAddress = item.ContractAddress,
+                            LastUpdateTime = DateTime.UtcNow,
+                        };
+                        item.CoinPrice = coinPrice;
+                        await _coinPriceService.Add(coinPrice);
+                    }
+                }
+            }
+
+            return Json(new { Success = true, Message = new { balances, Total = balances.Sum(u => u.Value * u.CoinPrice.Price) } });
         }
 
         public async Task<IActionResult> AddressBalancePartial(string address, string chainId)
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
+
+            foreach (var item in balances)
+            {
+                item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
+
+                if (item.CoinPrice is null)
+                {
+                    var price = await _covalentService.GetPrice(item.Symbol);
+
+                    if (price != 0)
+                    {
+                        var coinPrice = new CoinPrice
+                        {
+                            Symbol = item.Symbol,
+                            Price = price,
+                            ContractAddress = item.ContractAddress,
+                            LastUpdateTime = DateTime.UtcNow,
+                        };
+                        item.CoinPrice = coinPrice;
+                        await _coinPriceService.Add(coinPrice);
+                    }
+                }
+            }
+
             return PartialView("_AddressBalancePartial", new { Success = true, Message = balances });
         }
 
@@ -133,11 +183,12 @@ namespace WalletManager.Controllers
 
         public async Task<IActionResult> GetAllChains(bool update = false)
         {
-            //Get Chains from API
+            // Get Chains from database
             var chains = await _chainService.GetAllChains();
-            
+
             if (update || chains is null)
             {
+                //Get Chains from API
                 var allChains = await _covalentService.GetAllChain();
                 foreach (var item in allChains)
                 {
@@ -149,8 +200,44 @@ namespace WalletManager.Controllers
                 }
             }
 
-            // Get Chains from database
             return Json(new { Success = true, Message = chains });
+        }
+
+        public async Task<IActionResult> WalletPreviewPartial(string address, string chainId)
+        {
+            var balances = await _covalentService.GetAddressBalance(address, chainId);
+
+            foreach (var item in balances)
+            {
+                item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
+
+                if (item.CoinPrice is null)
+                {
+                    var price = await _covalentService.GetPrice(item.Symbol);
+
+                    if (price != 0)
+                    {
+                        var coinPrice = new CoinPrice
+                        {
+                            Symbol = item.Symbol,
+                            Price = price,
+                            ContractAddress = item.ContractAddress,
+                            LastUpdateTime = DateTime.UtcNow,
+                        };
+                        item.CoinPrice = coinPrice;
+                        await _coinPriceService.Add(coinPrice);
+                    }
+                }
+            }
+
+            var model = new WalletPreviewViewModel()
+            {
+                Balances = balances.OrderBy(u => u.Value * u.CoinPrice.Price).Take(3),
+                CoinCount = balances.Count(),
+                Total = balances.Sum(u => u.Value * u.CoinPrice.Price)
+            };
+
+            return View(model);
         }
 
         [Authorize]

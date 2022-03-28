@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,5 +23,8 @@ namespace WalletManager.Models
         public string Type { get; set; }
 
         public string LogoUrl { get; set; }
+
+        [NotMapped]
+        public CoinPrice CoinPrice { get; set; }
     }
 }

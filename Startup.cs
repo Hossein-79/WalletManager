@@ -50,6 +50,7 @@ namespace WalletManager
             services.AddTransient<IChainService, ChainService>();
             services.AddTransient<ICovalentService, CovalentService>();
             services.AddTransient<IWalletAddressService, WalletAddressService>();
+            services.AddTransient<ICoinPriceService, CoinPriceService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
