@@ -104,14 +104,15 @@
                 </svg>
             </button>
         </div>
-        <div class="flex flex-col">
-            <div class="input-wrapper">
-                <input type="text" id="address-input" class="input" placeholder="Wallet Address" autocapitalize="off" autocomplete="off" required>
-            </div>
+        <form class="flex flex-col" id="add-address-form" action="">
+            <input type="text" id="address-input" class="input" placeholder="Wallet Address" autocapitalize="off"
+                autocomplete="off" required>
             <div class="input-wrapper">
                 <select id="network-select" class="input input-select">
-                    <option value="mainnet" selected>Ethereum</option>
-                    <option value="testnet">Polygon</option>
+                    @foreach (var chain in Model.Chains)
+                    {
+                        <option value="@(chain.ChainId)">@(chain.Lable)</option>
+                    }
                 </select>
                 <div class="input-icon">
                     <svg role="img" class="icon">
@@ -119,7 +120,8 @@
                     </svg>
                 </div>
             </div>
-            <button class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75 my-3" type="button">
+            <button id="sample-address-btn" class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75 my-3"
+                type="button">
                 <svg role="img" class="h-5 w-5 mr-2">
                     <use xlink:href="/img/sprite.svg#icon-plus"></use>
                 </svg>
@@ -133,7 +135,7 @@
                 </div>
                 <span class="text">Check Address</span>
             </button>
-        </div>
+        </form>
     </div>
 </div>
 
@@ -142,13 +144,51 @@
         // ADD NEW ADDRESS
         const sampleAddress = [
             {
-                address: "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643",
-                network: ""
-            },
-            {
-                address: "0x5d3a536E4D6DbD6114cc1Ead35777bAB948E3643",
-                network: "testnet"
+                address: "0xB2AD0d50595eb6cF702Aad1896d3Aba83eC4Eea1",
+                chain: "1"
             }
         ];
+            $(document).on('click', '#sample-address-btn', function () {
+                const random = Math.floor(Math.random() * sampleAddress.length);
+                $('#address-input').val(sampleAddress[random].address);
+                $('#network-select').val(sampleAddress[random].chain);
+            });
+            $(document).on('submit', '#add-address-form', function (e) {
+                e.preventDefault();
+                var addressInput = $('#address-input');
+                var networkSelect = $('#network-select');
+                var submitBtn = $('#address-submit-btn');
+                const address = addressInput.val();
+                const chain = networkSelect.val();
+                submitBtn.addClass('loading').attr('disabled', 'disabled');
+                addressInput.attr('disabled', 'disabled');
+                networkSelect.attr('disabled', 'disabled');
+                $('#add-address-form .alert').remove();
+                $.get('/WalletPreviewPartial?address=' + address + '&chain=' + chain)
+                    .done(function (data) {
+                        if (data.success) {
+                            @* $('#add-address-modal').modal('hide');
+                                    $('#add-address-form').trigger('reset');
+                                    addressInput.removeAttr('disabled');
+                                    networkSelect.removeAttr('disabled');
+                                    submitBtn.removeClass('loading').removeAttr('disabled');
+                                    $('#address-list').append(data.html); *@
+                                console.log(data)
+                        } else {
+                            addressInput.removeAttr('disabled');
+                            networkSelect.removeAttr('disabled');
+                            submitBtn.removeClass('loading').removeAttr('disabled');
+                            submitBtn.before('<div class="alert alert-error">' + response.message + '</div>');
+                        }
+                    })
+                    .fail(function () {
+                        addressInput.removeAttr('disabled');
+                        networkSelect.removeAttr('disabled');
+                        submitBtn.removeClass('loading').removeAttr('disabled');
+                        submitBtn.before('<div class="alert alert-error">There has been an error, please try again.</div>');
+                    });
+                // ADD ADDRESS:
+                // /AddAddress?address=0x4263F62504C5d70248f98dC2F6007839A2F6aaB3&chainId=1&lable=Ali
+            })
     </script>
 }

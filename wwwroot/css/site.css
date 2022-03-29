@@ -471,6 +471,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .input{
+  margin-bottom: 0.5rem;
   width: 100%;
   border-radius: 0.5rem;
   border-width: 1px;
@@ -533,6 +534,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .input-wrapper .input{
+  margin: 0px;
   padding-right: 2.5rem;
 }
 

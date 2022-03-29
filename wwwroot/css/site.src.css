@@ -6,7 +6,7 @@
 
 @layer components {
     .input {
-        @apply w-full transition-colors bg-transparent border border-gray-300 dark:border-neutral-500 rounded-lg placeholder-shown:font-light focus:ring-1 focus:border-blue-400 focus:ring-blue-400 focus:outline-none px-4 py-3;
+        @apply w-full transition-colors bg-transparent border border-gray-300 dark:border-neutral-500 rounded-lg placeholder-shown:font-light focus:ring-1 focus:border-blue-400 focus:ring-blue-400 focus:outline-none px-4 py-3 mb-2;
     }
     .input:disabled {
         @apply bg-neutral-200 dark:bg-neutral-600;
@@ -15,7 +15,7 @@
         @apply relative mb-2;
     }
     .input-wrapper .input {
-        @apply pr-10;
+        @apply pr-10 m-0;
     }
     .input-wrapper .input-icon {
         @apply absolute inset-y-0 right-3 flex items-center pointer-events-none text-gray-300 dark:text-neutral-500;
