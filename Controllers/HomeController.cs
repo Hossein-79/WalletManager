@@ -235,7 +235,7 @@ namespace WalletManager.Controllers
 
             var model = new WalletPreviewViewModel()
             {
-                Balances = balances.OrderBy(u => u.Value * u.CoinPrice.Price).Take(3),
+                Balances = balances.OrderBy(u => u.Value * u.CoinPrice?.Price).Take(3),
                 CoinCount = balances.Count(),
                 Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price)
             };
