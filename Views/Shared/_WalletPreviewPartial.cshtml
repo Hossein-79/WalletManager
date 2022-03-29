@@ -1,5 +1,29 @@
 ﻿@model WalletPreviewViewModel 
 
 <div>
-    @(Model.CoinCount)
+    <div class="flex justify-between">
+        <span>Balance</span>
+        <span>$@(Model.Total.ToString("N2"))</span>
+    </div>
+    <div class="flex justify-between">
+        <span>First Activity</span>
+        @* TODO: ADD FIRST ACTIVITY *@
+        <span>12/03/2017 18:01</span>
+    </div>
+    <div class="flex">
+        @if (Model != null)
+        {
+            foreach (var coin in Model.Balances)
+            {
+                <div>
+                    @(coin.ContractName)
+                    <img src="@(coin.LogoUrl)" alt="@(coin.ContractName)">
+                </div>
+            }
+        }
+        else
+        {
+            <div>NULL</div>
+        }
+    </div>
 </div>

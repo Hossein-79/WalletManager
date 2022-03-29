@@ -56,20 +56,25 @@ $(document).on('change', '[name="dark-mode"], [name="dark-mode-desktop"]', funct
     }
 });
 // MODAL
+function showModal(modal) {
+    modal.addClass('active');
+    $('body').addClass('modal-active');
+}
+function hideModal(modal) {
+    modal.removeClass('active');
+    $('body').removeClass('modal-active');
+}
 $(document).on('click', '[data-modal]', function() {
     var modalId = $(this).attr('data-modal');
-    $('#' + modalId).addClass('active');
-    $('body').addClass('modal-active');
+    showModal($('#' + modalId));
 });
 $(document).on('click', '.modal-close', function() {
-    $(this).closest('.modal').removeClass('active');
-    $('body').removeClass('modal-active');
+    hideModal($(this).closest('.modal'));
 });
 // HIDE MODAL ON CLICK OUTSIDE
 $(document).on('click', '.modal', function(e) {
     if (e.target !== this) {
         return;
     }
-    $(this).removeClass('active');
-    $('body').removeClass('modal-active');
+    hideModal($(this));
 });

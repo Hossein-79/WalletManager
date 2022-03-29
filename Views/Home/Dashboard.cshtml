@@ -138,6 +138,19 @@
         </form>
     </div>
 </div>
+<div class="modal" id="wallet-preview-modal">
+    <div class="modal-body">
+        <div class="modal-header">
+            <h2>Wallet Preview</h2>
+            <button type="button" class="btn-icon modal-close">
+                <svg role="img" class="h-5 w-5">
+                    <use xlink:href="/img/sprite.svg#icon-x"></use>
+                </svg>
+            </button>
+        </div>
+        <div class="modal-content"></div>
+    </div>
+</div>
 
 @section Scripts {
     <script>
@@ -164,28 +177,26 @@
                 addressInput.attr('disabled', 'disabled');
                 networkSelect.attr('disabled', 'disabled');
                 $('#add-address-form .alert').remove();
-                $.get('/WalletPreviewPartial?address=' + address + '&chain=' + chain)
+                $.get('/WalletPreviewPartial?address=' + address + '&chainId=' + chain)
                     .done(function (data) {
-                        if (data.success) {
-                            @* $('#add-address-modal').modal('hide');
-                                    $('#add-address-form').trigger('reset');
-                                    addressInput.removeAttr('disabled');
-                                    networkSelect.removeAttr('disabled');
-                                    submitBtn.removeClass('loading').removeAttr('disabled');
-                                    $('#address-list').append(data.html); *@
-                                console.log(data)
-                        } else {
-                            addressInput.removeAttr('disabled');
-                            networkSelect.removeAttr('disabled');
-                            submitBtn.removeClass('loading').removeAttr('disabled');
+                        if (data.success === false) {
                             submitBtn.before('<div class="alert alert-error">' + response.message + '</div>');
+                        } else {
+                            $('#wallet-preview-modal .modal-content').html(data);
+                            addressInput.val('');
+                            networkSelect.val('1');
+                            hideModal($('#add-address-modal'));
+                            showModal($('#wallet-preview-modal'));
+                            console.log(data)
                         }
                     })
                     .fail(function () {
+                        submitBtn.before('<div class="alert alert-error">There has been an error, please try again.</div>');
+                    })
+                    .always(function () {
                         addressInput.removeAttr('disabled');
                         networkSelect.removeAttr('disabled');
                         submitBtn.removeClass('loading').removeAttr('disabled');
-                        submitBtn.before('<div class="alert alert-error">There has been an error, please try again.</div>');
                     });
                 // ADD ADDRESS:
                 // /AddAddress?address=0x4263F62504C5d70248f98dC2F6007839A2F6aaB3&chainId=1&lable=Ali
