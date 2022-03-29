@@ -35,5 +35,13 @@ namespace WalletManager.Helpers
 
             return res;
         }
+
+        public static string ShortenAddress(this string address)
+        {
+            if (address.Length < 20)
+                return address;
+
+            return address.Substring(0, 6) + "..." + address.Substring(address.Length - 4, 4);
+        }
     }
 }

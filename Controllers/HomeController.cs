@@ -207,6 +207,9 @@ namespace WalletManager.Controllers
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
 
+            if (balances is null)
+                return PartialView("_WalletPreviewPartial");
+
             foreach (var item in balances)
             {
                 item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
