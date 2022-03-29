@@ -122,7 +122,7 @@ namespace WalletManager.Controllers
                 }
             }
 
-            return Json(new { Success = true, Message = new { balances, Total = balances.Sum(u => u.Value * u.CoinPrice.Price) } });
+            return Json(new { Success = true, Message = new { balances, Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price) } });
         }
 
         public async Task<IActionResult> AddressBalancePartial(string address, string chainId)
@@ -234,7 +234,7 @@ namespace WalletManager.Controllers
             {
                 Balances = balances.OrderBy(u => u.Value * u.CoinPrice.Price).Take(3),
                 CoinCount = balances.Count(),
-                Total = balances.Sum(u => u.Value * u.CoinPrice.Price)
+                Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price)
             };
 
             return View(model);

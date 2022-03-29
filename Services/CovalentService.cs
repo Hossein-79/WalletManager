@@ -77,13 +77,12 @@ namespace WalletManager.Services
                 public string type { get; set; }
                 public string balance { get; set; }
                 public string balance_24h { get; set; }
-                public float quote_rate { get; set; }
-                public float quote_rate_24h { get; set; }
+                public float? quote_rate { get; set; }
+                public float? quote_rate_24h { get; set; }
                 public float quote { get; set; }
-                public float quote_24h { get; set; }
+                public float? quote_24h { get; set; }
                 public object nft_data { get; set; }
             }
-
         }
 
         private class GetPriceResponse
@@ -206,7 +205,14 @@ namespace WalletManager.Services
                 {
                     var deserialize = JsonSerializer.Deserialize<GetPriceResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                    return deserialize.data.items.OrderBy(u => u.rank).FirstOrDefault().quote_rate;
+                    if (deserialize.data.items.Any())
+                    {
+                        return deserialize.data.items.OrderBy(u => u.rank).FirstOrDefault().quote_rate;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
             }
             catch (Exception)
