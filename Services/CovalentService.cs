@@ -199,8 +199,6 @@ namespace WalletManager.Services
                 var response = await _client.GetAsync($"pricing/tickers/?quote-currency=USD&format=JSON&tickers={symbol}&page-number=&key={_apiKey}");
                 var content = await response.Content.ReadAsStringAsync();
 
-                Console.WriteLine(content);
-
                 if (response.IsSuccessStatusCode)
                 {
                     var deserialize = JsonSerializer.Deserialize<GetPriceResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });

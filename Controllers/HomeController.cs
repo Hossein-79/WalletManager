@@ -99,7 +99,7 @@ namespace WalletManager.Controllers
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
 
-            foreach (var item in balances)
+            foreach (var item in balances ?? Enumerable.Empty<Balance>())
             {
                 item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
 
@@ -122,6 +122,7 @@ namespace WalletManager.Controllers
                 }
             }
 
+            balances = balances.OrderBy(u => u.Value * u.CoinPrice?.Price);
             return Json(new { Success = true, Message = new { balances, Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price) } });
         }
 
@@ -129,7 +130,7 @@ namespace WalletManager.Controllers
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
 
-            foreach (var item in balances)
+            foreach (var item in balances ?? Enumerable.Empty<Balance>())
             {
                 item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
 
@@ -152,7 +153,8 @@ namespace WalletManager.Controllers
                 }
             }
 
-            return PartialView("_AddressBalancePartial", new { Success = true, Message = balances });
+            balances = balances.OrderBy(u => u.Value * u.CoinPrice?.Price);
+            return PartialView("_AddressBalancePartial", balances);
         }
 
         [Authorize]

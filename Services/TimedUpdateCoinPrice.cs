@@ -13,7 +13,7 @@ namespace WalletManager.Services
     {
         private Timer _timer;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly double _jobTimer = 60;
+        private readonly double _jobTimer = 600;
 
         public TimedUpdateCoinPrice(IServiceScopeFactory serviceScopeFactory)
         {
@@ -22,17 +22,26 @@ namespace WalletManager.Services
 
         private async void DoWork(object state)
         {
+            Console.WriteLine("-----");
             using var scope = _serviceScopeFactory.CreateScope();
             var coinPriceService = scope.ServiceProvider.GetRequiredService<ICoinPriceService>();
+            var covalentService = scope.ServiceProvider.GetRequiredService<ICovalentService>();
 
             var allCoins = await coinPriceService.GetAllCoins();
 
-
             foreach (var item in allCoins ?? Enumerable.Empty<CoinPrice>())
             {
+                var price = await covalentService.GetPrice(item.Symbol);
+                Console.WriteLine($"{item.Symbol} => {price}");
+                if (price != 0)
+                {
+                    item.Price = price;
+                    item.LastUpdateTime = DateTime.UtcNow;
 
+                    await coinPriceService.Update(item);
+                }
             }
-
+            Console.WriteLine("******");
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
