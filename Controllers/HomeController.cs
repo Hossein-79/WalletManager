@@ -237,7 +237,7 @@ namespace WalletManager.Controllers
                 Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price)
             };
 
-            return View(model);
+            return PartialView("_WalletPreviewPartial", model);
         }
 
         [Authorize]
