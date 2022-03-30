@@ -12,5 +12,7 @@ namespace WalletManager.Models.ViewModel
         public decimal Total { get; set; }
 
         public int CoinCount { get; set; }
+
+        public DateTime? FirstActivity { get; set; }
     }
 }

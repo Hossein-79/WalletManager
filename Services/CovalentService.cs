@@ -121,6 +121,88 @@ namespace WalletManager.Services
 
         }
 
+        private class GetTransactionResponse
+        {
+            public Data data { get; set; }
+            public bool error { get; set; }
+            public object error_message { get; set; }
+            public object error_code { get; set; }
+
+            public class Data
+            {
+                public string address { get; set; }
+                public string updated_at { get; set; }
+                public string next_update_at { get; set; }
+                public string quote_currency { get; set; }
+                public int chain_id { get; set; }
+                public Item[] items { get; set; }
+                public Pagination pagination { get; set; }
+            }
+
+            public class Pagination
+            {
+                public bool has_more { get; set; }
+                public int page_number { get; set; }
+                public int page_size { get; set; }
+                public object total_count { get; set; }
+            }
+
+            public class Item
+            {
+                public DateTime block_signed_at { get; set; }
+                public int block_height { get; set; }
+                public string tx_hash { get; set; }
+                public int tx_offset { get; set; }
+                public bool successful { get; set; }
+                public string from_address { get; set; }
+                public object from_address_label { get; set; }
+                public string to_address { get; set; }
+                public string to_address_label { get; set; }
+                public string value { get; set; }
+                public float value_quote { get; set; }
+                public int gas_offered { get; set; }
+                public int gas_spent { get; set; }
+                public long gas_price { get; set; }
+                public float gas_quote { get; set; }
+                public float gas_quote_rate { get; set; }
+                public Log_Events[] log_events { get; set; }
+            }
+
+            public class Log_Events
+            {
+                public DateTime block_signed_at { get; set; }
+                public int block_height { get; set; }
+                public int tx_offset { get; set; }
+                public int log_offset { get; set; }
+                public string tx_hash { get; set; }
+                public string[] raw_log_topics { get; set; }
+                public int sender_contract_decimals { get; set; }
+                public string sender_name { get; set; }
+                public string sender_contract_ticker_symbol { get; set; }
+                public string sender_address { get; set; }
+                public string sender_address_label { get; set; }
+                public string sender_logo_url { get; set; }
+                public string raw_log_data { get; set; }
+                public Decoded decoded { get; set; }
+            }
+
+            public class Decoded
+            {
+                public string name { get; set; }
+                public string signature { get; set; }
+                public Param[] _params { get; set; }
+            }
+
+            public class Param
+            {
+                public string name { get; set; }
+                public string type { get; set; }
+                public bool indexed { get; set; }
+                public bool decoded { get; set; }
+                public string value { get; set; }
+            }
+        }
+
         public async Task<IEnumerable<Chain>> GetAllChain()
         {
             try
@@ -218,6 +300,28 @@ namespace WalletManager.Services
                 throw;
             }
             return 0;
+        }
+
+        public async Task<DateTime?> GetWalletFirstActivity(string address, string chainId)
+        {
+            try
+            {
+                var response = await _client.GetAsync($"{chainId}/address/{address}/transactions_v2/?quote-currency=USD&format=JSON&block-signed-at-asc=true&no-logs=false&key={_apiKey}");
+                var content = await response.Content.ReadAsStringAsync();
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var deserialize = JsonSerializer.Deserialize<GetTransactionResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                    var firstDate = deserialize.data.items.FirstOrDefault().block_signed_at;
+                    return firstDate;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return null;
         }
     }
 }

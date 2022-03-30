@@ -238,8 +238,9 @@ namespace WalletManager.Controllers
             {
                 Balances = balances.OrderByDescending(u => u.Value * u.CoinPrice?.Price).Take(3),
                 CoinCount = balances.Count(),
-                Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price)
-            };
+                Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price),
+                FirstActivity = await _covalentService.GetWalletFirstActivity(address, chainId)
+        };
 
             return PartialView("_WalletPreviewPartial", model);
         }
