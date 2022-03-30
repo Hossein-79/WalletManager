@@ -279,6 +279,9 @@ namespace WalletManager.Services
         {
             try
             {
+                if (string.IsNullOrEmpty(symbol))
+                    return 0;
+
                 var response = await _client.GetAsync($"pricing/tickers/?quote-currency=USD&format=JSON&tickers={symbol}&page-number=&key={_apiKey}");
                 var content = await response.Content.ReadAsStringAsync();
 

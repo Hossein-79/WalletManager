@@ -17,7 +17,7 @@
                     foreach (var token in Model)
                     {
                         tokenCount++;
-                        var CoinBalance = token.Value * token.CoinPrice.Price;
+                        var CoinBalance = token.Value * (token.CoinPrice != null ? token.CoinPrice.Price : 0);
                         var percentage = (CoinBalance * 100) / totalBalance;
                         var color = "";
                         if (tokenCount < 4) accPercentage += percentage;
@@ -53,7 +53,7 @@
                     foreach (var token in Model)
                     {
                         tokenCount2++;
-                        var CoinBalance2 = token.Value * token.CoinPrice.Price;
+                        var CoinBalance2 = token.Value * (token.CoinPrice != null ? token.CoinPrice.Price : 0);
                         var percentage2 = (CoinBalance2 * 100) / totalBalance;
                         var color2 = "";
                         var tokenName = token.ContractName;
