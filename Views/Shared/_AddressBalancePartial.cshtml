@@ -92,7 +92,7 @@
         <div>
             @foreach (var token in Model)
             {
-                <div class="list-child no-hover flex items-center">
+                <div class="list-child no-hover flex items-center overflow-hidden">
                     <img src="@(token.LogoUrl)" alt="@(token.ContractName)"
                 class="block rounded-full w-10 h-10 mr-3"
                 onerror="this.onerror=null;this.src='/img/placeholder.png';">

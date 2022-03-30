@@ -1,20 +1,26 @@
 # multichain
 ##### A dashboard to track wallet addresses across multiple blockchains.
-[https://multichain.liara.run](https://multichain.liara.run)
+View online demo at [https://multichain.liara.run](https://multichain.liara.run)
+![multichain](/readme/07.png)
 
-<!-- ### Mobile screenshots
-<div style="display:flex">
-  <img src="/readme/1-mobile.PNG" alt="1-mobile" width="32%" />
-  <img src="/readme/2-mobile.PNG" alt="2-mobile" width="32%" />
-  <img src="/readme/3-mobile.PNG" alt="3-mobile" width="32%" />
+> This project was developed for [Multi-Chain Web3 Projects](https://gitcoin.co/issue/covalenthq/covalent-gitcoin-bounties/19/100028550) bounty at the [Grants Round 13 Hackathon](https://gitcoin.co/hackathon/gr13/?) sponsored by [Covalent](https://www.covalenthq.com).
+
+### Mobile screenshots
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between">
+  <img src="readme/01.png" alt="1-mobile" width="19%" />
+  <img src="readme/02.png" alt="2-mobile" width="19%" />
+  <img src="readme/03.png" alt="3-mobile" width="19%" />
+  <img src="readme/04.png" alt="4-mobile" width="19%" />
+  <img src="readme/05.png" alt="5-mobile" width="19%" />
 </div>
 
-### Desktop screenshots
-<div style="display:flex">
-  <img src="/readme/1-desktop.PNG" alt="1-desktop" width="32%" />
-  <img src="/readme/2-desktop.PNG" alt="2-desktop" width="32%" />
-  <img src="/readme/3-desktop.PNG" alt="3-desktop" width="32%" />
-</div> -->
+### Desktop screenshot
+<div>
+    <img src="readme/06.png" alt="1-desktop" width="100%" />
+</div>
+
+### UI
+[multichain UI design on Figma](https://www.figma.com/file/0Yof96GS60ghkhUqAlU9iH/multichain?node-id=0%3A1)
 
 ---
 

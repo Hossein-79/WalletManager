@@ -1479,6 +1479,15 @@ body {
 }
 
 @media (min-width: 1024px){
+  .lg\:sticky{
+    position: -webkit-sticky;
+    position: sticky;
+  }
+
+  .lg\:bottom-0{
+    bottom: 0px;
+  }
+
   .lg\:col-start-1{
     grid-column-start: 1;
   }
@@ -1605,6 +1614,10 @@ body {
 
   .lg\:pb-20{
     padding-bottom: 5rem;
+  }
+
+  .lg\:align-baseline{
+    vertical-align: baseline;
   }
 
   .lg\:text-white{
