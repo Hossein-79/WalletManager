@@ -98,7 +98,10 @@
                 onerror="this.onerror=null;this.src='/img/placeholder.png';">
                     <div class="flex flex-col text-left">
                         <span>@(token.ContractName)</span>
-                        <small class="text-sm font-light text-neutral-400">$@(token.CoinPrice?.Price.ToString("N2"))</small>
+                        @if(token.CoinPrice?.Price != null)
+                        {
+                            <small class="text-sm font-light text-neutral-400">$@(token.CoinPrice?.Price.ToString("N2"))</small>
+                        }
                     </div>
                     <div class="flex flex-col text-right ml-auto">
                         <span>
