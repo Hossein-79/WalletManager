@@ -95,16 +95,16 @@
     </section>
     <section id="main-section" class="flex flex-col lg:col-start-2 lg:col-end-5">
         @* EMPTY STATE *@
-        <div class="empty-state text-neutral-500 dark:text-neutral-400 m-auto">
+        <div class="empty-state text-neutral-500 dark:text-neutral-400 mt-5 m-auto lg:mt-auto">
             Pick an address to see some magic.
         </div>
         <div class="main-content bg-white dark:bg-neutral-700 rounded-lg p-4 mt-5 lg:m-5" style="display: none;">
             <div class="flex justify-between items-start mb-4">
-                <div>
+                <div class="flex-shrink">
                     <h2 class="address-label"></h2>
-                    <small class="address-short text-neutral-400"></small>
+                    <small class="address-short text-neutral-400 break-all"></small>
                 </div>
-                <button type="button" class="btn-icon" id="close-address">
+                <button type="button" class="btn-icon flex-shrink-0 ml-5" id="close-address">
                     <svg role="img" class="h-5 w-5">
                         <use xlink:href="/img/sprite.svg#icon-x"></use>
                     </svg>
@@ -132,7 +132,7 @@
                 <select id="network-select" class="input input-select">
                     @foreach (var chain in Model.Chains)
                     {
-                        <option value="@(chain.ChainId)">@(chain.Lable)</option>
+                        <option value="@(chain.CovalentId)">@(chain.Lable)</option>
                     }
                 </select>
                 <div class="input-icon">
@@ -212,7 +212,7 @@
         $.get('/WalletPreviewPartial?address=' + address + '&chainId=' + chain)
             .done(function (data) {
                 if (data.success === false) {
-                    submitBtn.before('<div class="alert alert-error">' + response.message + '</div>');
+                    submitBtn.before('<div class="alert alert-error">' + data.message + '</div>');
                 } else {
                     $('#wallet-preview-modal').attr('data-address', address).attr('data-chain', chain);
                     $('#wallet-preview-modal .modal-content').html(data);
@@ -243,7 +243,7 @@
         $.get('/AddAddress?address=' + address + '&chainId=' + chain + (title ? '&lable=' + title : ''))
             .done(function (data) {
                 if (data.success === false) {
-                    btn.before('<div class="alert alert-error">' + response.message + '</div>');
+                    btn.before('<div class="alert alert-error">' + data.message + '</div>');
                 } else {
                     $('#address-list-container .empty-state').remove();
                     $('#address-list-container').append(data);
@@ -262,23 +262,34 @@
     $(document).on('change input', '#address-title-input, #address-input, #network-select', function () {
         $('.alert').remove();
     });
-    $(document).on('click', '.address-item-btn', function() {
+    function closeAddress() {
         $('.address-item-btn').removeClass('active');
+        $('#main-section .main-content').hide();
+        $('#main-section .main-content .inject-here').html('');
+        $('#main-section .main-content .address-label').text('');
+        $('#main-section .main-content .address-short').text('');
+        $('#main-section .empty-state').show();
+        $('#main-section .loader').remove();
+    }
+    $(document).on('click', '.address-item-btn', function() {
+        closeAddress();
         var btn = $(this);
         var address = btn.attr('data-address');
         var chain = btn.attr('data-chain');
         var title = btn.find('.title').text();
-        var shortAddress = btn.attr('data-short-address');
+        var shortAddress = btn.attr('data-address');
         $('#main-section .empty-state').hide();
-        $('#main-section .main-content').before('<div class="loader m-auto"><svg role="img" class="animate-spin w-10 h-10"><use xlink:href="/img/sprite.svg#icon-loader"></use></svg></div>');
+        $('#main-section .main-content').before('<div class="loader mt-5 m-auto lg:mt-auto"><svg role="img" class="animate-spin w-10 h-10"><use xlink:href="/img/sprite.svg#icon-loader"></use></svg></div>');
         btn.addClass('active');
         $.get('/AddressBalancePartial?address=' + address + '&chainId=' + chain)
             .done(function (data) {
-                $('#main-section .main-content .inject-here').html(data);
-                $('#main-section .main-content .address-label').text(title);
-                $('#main-section .main-content .address-short').text(shortAddress);
-                $('#main-section .main-content').show();
-                $('#main-section .loader').remove();
+                if(address = $('.address-item-btn.active').attr('data-address')) {
+                    $('#main-section .main-content .inject-here').html(data);
+                    $('#main-section .main-content .address-label').text(title);
+                    $('#main-section .main-content .address-short').text(shortAddress);
+                    $('#main-section .main-content').show();
+                    $('#main-section .loader').remove();
+                }
             })
             .fail(function () {
                 $('#main-section .main-content').html('<div class="alert alert-error">There has been an error, please try again.</div>');
@@ -286,13 +297,6 @@
                 btn.removeClass('active');
             });
     });
-    $(document).on('click', '#close-address', function() {
-        $('.address-item-btn').removeClass('active');
-        $('#main-section .main-content').hide();
-        $('#main-section .main-content .inject-here').html('');
-        $('#main-section .main-content .address-label').text('');
-        $('#main-section .main-content .address-short').text('');
-        $('#main-section .empty-state').show();
-    });
+    $(document).on('click', '#close-address', closeAddress);
 </script>
 }
