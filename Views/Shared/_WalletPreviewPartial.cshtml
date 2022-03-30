@@ -1,29 +1,32 @@
 ﻿@model WalletPreviewViewModel 
 
 <div>
-    <div class="flex justify-between">
+    <div class="flex justify-between mb-3">
         <span>Balance</span>
         <span>$@(Model.Total.ToString("N2"))</span>
     </div>
-    <div class="flex justify-between">
+    <div class="flex justify-between mb-3">
         <span>First Activity</span>
         @* TODO: ADD FIRST ACTIVITY *@
         <span>12/03/2017 18:01</span>
     </div>
-    <div class="flex">
+    <div class="flex items-center my-5">
         @if (Model != null)
         {
             foreach (var coin in Model.Balances)
             {
                 <div>
-                    @(coin.ContractName)
-                    <img src="@(coin.LogoUrl)" alt="@(coin.ContractName)">
+                    <img src="@(coin.LogoUrl)" alt="@(coin.ContractName)" class="rounded-full w-10 h-10 mr-1" onerror="this.onerror=null;this.src='default-image.jpg';">
                 </div>
+            }
+            if (Model.CoinCount > 3)
+            {
+                <span class="text-sm text-neutral-400 ml-2">+ @(Model.CoinCount - 3) More Tokens</span>
             }
         }
         else
         {
-            <div>NULL</div>
+            <div>Given wallet address has no data!</div>
         }
     </div>
 </div>

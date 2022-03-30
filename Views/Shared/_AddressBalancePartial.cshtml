@@ -1,5 +1,105 @@
 ﻿@model IEnumerable<Balance>
 
-<h1>
-    test
-</h1>
+<div>
+    @if (Model.Count() > 0)
+    {
+        <div>
+            <h3 class="text-sm">Tokens</h3>
+            <div class="rounded-lg overflow-hidden flex h-3 my-2">
+                @{
+                    var totalBalance = Model.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price);
+                    var tokenCount = 0;
+                    decimal accPercentage = 0;
+                    foreach (var token in Model)
+                    {
+                        tokenCount++;
+                        var CoinBalance = token.Value * token.CoinPrice.Price;
+                        var percentage = (CoinBalance * 100) / totalBalance;
+                        var color = "";
+                        if(tokenCount < 4) accPercentage += percentage;
+                        if (tokenCount == 1)
+                        {
+                            color = "bg-pink-200";
+                        }
+                        else if (tokenCount == 2)
+                        {
+                            color = "bg-emerald-300";
+                        }
+                        else if (tokenCount == 3)
+                        {
+                            color = "bg-rose-400";
+                        }
+                        else if (tokenCount == 4)
+                        {
+                            color = "bg-amber-200";
+                            percentage = 100 - accPercentage;
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        <div class="@(color)" style="width: @(percentage)%;"></div>
+                    }
+                }
+            </div>
+            <div class="flex flex-wrap text-xs">
+                @{
+                    var tokenCount2 = 0;
+                    decimal accPercentage2 = 0;
+                    foreach (var token in Model)
+                    {
+                        tokenCount2++;
+                        var CoinBalance2 = token.Value * token.CoinPrice.Price;
+                        var percentage2 = (CoinBalance2 * 100) / totalBalance;
+                        var color2 = "";
+                        var tokenName = token.ContractName;
+                        if(tokenCount2 < 4) accPercentage2 += percentage2;
+                        if (tokenCount2 == 1)
+                        {
+                            color2 = "bg-pink-200";
+                        }
+                        else if (tokenCount2 == 2)
+                        {
+                            color2 = "bg-emerald-300";
+                        }
+                        else if (tokenCount2 == 3)
+                        {
+                            color2 = "bg-rose-400";
+                        }
+                        else if (tokenCount2 == 4)
+                        {
+                            color2 = "bg-amber-200";
+                            percentage2 = 100 - accPercentage2;
+                            tokenName = "Others";
+                        }
+                        else
+                        {
+                            break;
+                        }
+                        <div class="flex items-center mr-5 mb-2">
+                            <span class="block h-3 w-3 rounded-full @(color2)"></span>
+                            <span class="mx-1">@(tokenName)</span>
+                            <span class="text-neutral-400">@(percentage2.ToString("N2"))%</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center">
+            <h3 class="text-sm">No tokens found</h3>
+        </div>
+    }
+    @foreach (var item in Model)
+    {
+        <ul>
+            <li>ContractName: @(item.ContractName)</li>
+            <li>CoinPrice: @(item.CoinPrice)</li>
+            <li>LogoUrl: @(item.LogoUrl)</li>
+            <li>Symbol: @(item.Symbol)</li>
+            <li>Value: @(item.Value)</li>
+        </ul>
+    }
+</div>

@@ -1,9 +1,9 @@
 @model WalletAddress
 
-<button class="list-child flex items-center" type="button">
+<button class="address-item-btn list-child flex items-center" type="button" data-address="@(Model.Address)" data-chain="@(Model.ChainId)" data-short-address="@(Model.Address.ShortenAddress())">
     <img src="@(Model.Chain.LogoUrl)" alt="@(Model.Chain.Name)" class="block dark:brightness-150 w-6 h-6 mr-3">
-    <span>
-        @(Model.Label)
+    <span class="title">
+        @(Model.Label != null ? Model.Label : Model.Address.ShortenAddress())
     </span>
     <svg role="img" class="arrow-icon ml-auto w-6 h-6">
         <use xlink:href="/img/sprite.svg#icon-chevron-right"></use>

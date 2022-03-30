@@ -5,7 +5,7 @@
 <div class="lg:grid lg:grid-cols-4 lg:h-screen">
     <section class="lg:col-start-1 lg:col-end-2 lg:flex lg:flex-col lg:bg-white lg:dark:bg-neutral-700 lg:shadow-sm">
         @* DESKTOP LOGO *@
-        <header class="hidden lg:block border-b border-neutral-300 dark:border-neutral-500 px-4 py-6">
+        <header class="hidden lg:block lg:sticky top-0 border-b border-neutral-300 dark:border-neutral-500 lg:bg-white lg:dark:bg-neutral-700 px-4 py-6">
             <a href="/">
                 <svg role="img" class="h-8 w-44 text-slate-600 dark:text-slate-100">
                     <use xlink:href="/img/sprite.svg#logotype"></use>
@@ -13,7 +13,8 @@
             </a>
         </header>
         @* PAGE CONTENT *@
-        <div class="flex flex-col rounded-lg bg-white dark:bg-neutral-700 lg:bg-transparent lg:dark:bg-transparent lg:flex-grow p-4">
+        <div
+            class="flex flex-col rounded-lg bg-white dark:bg-neutral-700 lg:bg-transparent lg:dark:bg-transparent lg:flex-grow p-4">
             <div class="flex justify-between items-center text-sm mb-4">
                 <h2>Wallet Addresses</h2>
                 <button type="button" class="btn btn-sm hidden lg:flex items-center" data-modal="add-address-modal">
@@ -23,29 +24,31 @@
                     <span class="text">Add New</span>
                 </button>
             </div>
-            <div class="flex flex-col lg:flex-grow">
-                @if(Model.Addresses.Count() > 0)
+            <div id="address-list-container" class="flex flex-col lg:flex-grow">
+                @if (Model.Addresses.Count() > 0)
                 {
-                    <div>
-                        @foreach (var address in Model.Addresses)
-                        {
-                            @await Html.PartialAsync("~/Views/Shared/_AddressListItemPartial.cshtml", address);
-                        }
-                    </div>
+                    foreach (var address in Model.Addresses)
+                    {
+                        @await Html.PartialAsync("~/Views/Shared/_AddressListItemPartial.cshtml", address)
+                        ;
+                    }
                 }
                 else
                 {
                     @* EMPTY STATE *@
-                    <div class="flex flex-col items-center border border-dashed border-neutral-300 dark:border-neutral-500 lg:border-0 text-neutral-400 text-center text-sm rounded-lg py-10 my-auto">
+                    <div
+                    class="empty-state flex flex-col items-center border border-dashed border-neutral-300 dark:border-neutral-500 lg:border-0 text-neutral-400 text-center text-sm rounded-lg py-10 my-auto">
                         This List is Empty!
-                        <button class="hidden lg:block text-sky-500 hover:text-sky-600 active:text-sky-600/75 mt-4" type="button" data-modal="add-address-modal">
+                        <button class="hidden lg:block text-sky-500 hover:text-sky-600 active:text-sky-600/75 mt-4"
+                        type="button" data-modal="add-address-modal">
                             <span>Add New Address</span>
                         </button>
                     </div>
                 }
             </div>
             <div class="lg:hidden mt-4">
-                <button class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75" type="button" data-modal="add-address-modal">
+                <button class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75" type="button"
+                    data-modal="add-address-modal">
                     <svg role="img" class="h-5 w-5 mr-2">
                         <use xlink:href="/img/sprite.svg#icon-plus"></use>
                     </svg>
@@ -58,16 +61,20 @@
             <div>
                 <div class="grid grid-cols-2 gap-5">
                     <div>
-                        <input type="radio" name="dark-mode-desktop" id="dark-mode-desktop-light" class="light-mode peer hidden">
-                        <label for="dark-mode-desktop-light" class="block transition-colors rounded-lg cursor-pointer hover:bg-neutral-500/5 border border-neutral-300 text-neutral-300 dark:text-neutral-500 dark:border-neutral-500 peer-checked:border-sky-500 peer-checked:text-sky-500 peer-checked:bg-sky-500/10 p-5">
+                        <input type="radio" name="dark-mode-desktop" id="dark-mode-desktop-light"
+                            class="light-mode peer hidden">
+                        <label for="dark-mode-desktop-light"
+                            class="block transition-colors rounded-lg cursor-pointer hover:bg-neutral-500/5 border border-neutral-300 text-neutral-300 dark:text-neutral-500 dark:border-neutral-500 peer-checked:border-sky-500 peer-checked:text-sky-500 peer-checked:bg-sky-500/10 p-5">
                             <svg role="img" class="h-5 w-5 mx-auto">
                                 <use xlink:href="/img/sprite.svg#icon-sun"></use>
                             </svg>
                         </label>
                     </div>
                     <div>
-                        <input type="radio" name="dark-mode-desktop" id="dark-mode-desktop-dark" class="dark-mode peer hidden">
-                        <label for="dark-mode-desktop-dark" class="block transition-colors rounded-lg cursor-pointer hover:bg-neutral-500/5 border border-neutral-300 text-neutral-300 dark:text-neutral-500 dark:border-neutral-500 peer-checked:border-sky-500 peer-checked:text-sky-500 peer-checked:bg-sky-500/10 p-5">
+                        <input type="radio" name="dark-mode-desktop" id="dark-mode-desktop-dark"
+                            class="dark-mode peer hidden">
+                        <label for="dark-mode-desktop-dark"
+                            class="block transition-colors rounded-lg cursor-pointer hover:bg-neutral-500/5 border border-neutral-300 text-neutral-300 dark:text-neutral-500 dark:border-neutral-500 peer-checked:border-sky-500 peer-checked:text-sky-500 peer-checked:bg-sky-500/10 p-5">
                             <svg role="img" class="h-5 w-5 mx-auto">
                                 <use xlink:href="/img/sprite.svg#icon-moon"></use>
                             </svg>
@@ -86,10 +93,24 @@
             </div>
         </footer>
     </section>
-    <section class="hidden lg:flex flex-col lg:col-start-2 lg:col-end-5">
+    <section id="main-section" class="flex flex-col lg:col-start-2 lg:col-end-5">
         @* EMPTY STATE *@
-        <div class="text-neutral-500 dark:text-neutral-400 m-auto">
+        <div class="empty-state text-neutral-500 dark:text-neutral-400 m-auto">
             Pick an address to see some magic.
+        </div>
+        <div class="main-content bg-white dark:bg-neutral-700 rounded-lg p-4 mt-5 lg:m-5" style="display: none;">
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h2 class="address-label"></h2>
+                    <small class="address-short text-neutral-400"></small>
+                </div>
+                <button type="button" class="btn-icon modal-close">
+                    <svg role="img" class="h-5 w-5">
+                        <use xlink:href="/img/sprite.svg#icon-x"></use>
+                    </svg>
+                </button>
+            </div>
+            <div class="inject-here"></div>
         </div>
     </section>
 </div>
@@ -120,8 +141,8 @@
                     </svg>
                 </div>
             </div>
-            <button id="sample-address-btn" class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75 my-3"
-                type="button">
+            <button id="sample-address-btn"
+                class="flex items-center text-sky-500 hover:text-sky-600 active:text-sky-600/75 my-3" type="button">
                 <svg role="img" class="h-5 w-5 mr-2">
                     <use xlink:href="/img/sprite.svg#icon-plus"></use>
                 </svg>
@@ -149,57 +170,120 @@
             </button>
         </div>
         <div class="modal-content"></div>
+        <form action="" id="address-submit-form" class="flex flex-col mt-4">
+            <input type="text" id="address-title-input" class="input" placeholder="Title(optional)" autocomplete="off">
+            <button type="submit" id="add-address-btn" class="btn mt-2">
+                <div class="loader">
+                    <svg role="img" class="animate-spin w-6 h-6">
+                        <use xlink:href="/img/sprite.svg#icon-loader"></use>
+                    </svg>
+                </div>
+                <span class="text">Add Address</span>
+            </button>
+        </form>
     </div>
 </div>
 
 @section Scripts {
-    <script>
-        // ADD NEW ADDRESS
-        const sampleAddress = [
-            {
-                address: "0xB2AD0d50595eb6cF702Aad1896d3Aba83eC4Eea1",
-                chain: "1"
-            }
-        ];
-            $(document).on('click', '#sample-address-btn', function () {
-                const random = Math.floor(Math.random() * sampleAddress.length);
-                $('#address-input').val(sampleAddress[random].address);
-                $('#network-select').val(sampleAddress[random].chain);
-            });
-            $(document).on('submit', '#add-address-form', function (e) {
-                e.preventDefault();
-                var addressInput = $('#address-input');
-                var networkSelect = $('#network-select');
-                var submitBtn = $('#address-submit-btn');
-                const address = addressInput.val();
-                const chain = networkSelect.val();
-                submitBtn.addClass('loading').attr('disabled', 'disabled');
-                addressInput.attr('disabled', 'disabled');
-                networkSelect.attr('disabled', 'disabled');
-                $('#add-address-form .alert').remove();
-                $.get('/WalletPreviewPartial?address=' + address + '&chainId=' + chain)
-                    .done(function (data) {
-                        if (data.success === false) {
-                            submitBtn.before('<div class="alert alert-error">' + response.message + '</div>');
-                        } else {
-                            $('#wallet-preview-modal .modal-content').html(data);
-                            addressInput.val('');
-                            networkSelect.val('1');
-                            hideModal($('#add-address-modal'));
-                            showModal($('#wallet-preview-modal'));
-                            console.log(data)
-                        }
-                    })
-                    .fail(function () {
-                        submitBtn.before('<div class="alert alert-error">There has been an error, please try again.</div>');
-                    })
-                    .always(function () {
-                        addressInput.removeAttr('disabled');
-                        networkSelect.removeAttr('disabled');
-                        submitBtn.removeClass('loading').removeAttr('disabled');
-                    });
-                // ADD ADDRESS:
-                // /AddAddress?address=0x4263F62504C5d70248f98dC2F6007839A2F6aaB3&chainId=1&lable=Ali
+<script>
+    // ADD NEW ADDRESS
+    const sampleAddress = [
+        {
+            address: "0xDA963b390A4588bE463AdC6311F6F9391cd23dFB",
+            chain: "1"
+        }
+    ];
+    $(document).on('click', '#sample-address-btn', function () {
+        const random = Math.floor(Math.random() * sampleAddress.length);
+        $('#address-input').val(sampleAddress[random].address);
+        $('#network-select').val(sampleAddress[random].chain);
+    });
+    $(document).on('submit', '#add-address-form', function (e) {
+        e.preventDefault();
+        var addressInput = $('#address-input');
+        var networkSelect = $('#network-select');
+        var submitBtn = $('#address-submit-btn');
+        const address = addressInput.val();
+        const chain = networkSelect.val();
+        submitBtn.addClass('loading').attr('disabled', 'disabled');
+        addressInput.attr('disabled', 'disabled');
+        networkSelect.attr('disabled', 'disabled');
+        $('#add-address-form .alert').remove();
+        $.get('/WalletPreviewPartial?address=' + address + '&chainId=' + chain)
+            .done(function (data) {
+                if (data.success === false) {
+                    submitBtn.before('<div class="alert alert-error">' + response.message + '</div>');
+                } else {
+                    $('#wallet-preview-modal').attr('data-address', address).attr('data-chain', chain);
+                    $('#wallet-preview-modal .modal-content').html(data);
+                    addressInput.val('');
+                    networkSelect.val('1');
+                    hideModal($('#add-address-modal'));
+                    showModal($('#wallet-preview-modal'));
+                }
             })
-    </script>
+            .fail(function () {
+                submitBtn.before('<div class="alert alert-error">There has been an error, please try again.</div>');
+            })
+            .always(function () {
+                addressInput.removeAttr('disabled');
+                networkSelect.removeAttr('disabled');
+                submitBtn.removeClass('loading').removeAttr('disabled');
+            });
+    });
+    $(document).on('submit', '#address-submit-form', function (e) {
+        e.preventDefault();
+        var address = $('#wallet-preview-modal').attr('data-address');
+        var chain = $('#wallet-preview-modal').attr('data-chain');
+        var title = $('#address-title-input').val() !== '' ? $('#address-title-input').val() : null;
+        var btn = $('#add-address-btn');
+        $(this).find('.alert').remove();
+        btn.addClass('loading').attr('disabled', 'disabled');
+        $('#address-title-input').attr('disabled', 'disabled');
+        $.get('/AddAddress?address=' + address + '&chainId=' + chain + (title ? '&lable=' + title : ''))
+            .done(function (data) {
+                if (data.success === false) {
+                    btn.before('<div class="alert alert-error">' + response.message + '</div>');
+                } else {
+                    $('#address-list-container .empty-state').remove();
+                    $('#address-list-container').append(data);
+                    $('#address-title-input').val('');
+                    hideModal($('#wallet-preview-modal'));
+                }
+            })
+            .fail(function () {
+                btn.before('<div class="alert alert-error">There has been an error, please try again.</div>');
+            })
+            .always(function () {
+                $('#address-title-input').val('').removeAttr('disabled');
+                btn.removeClass('loading').removeAttr('disabled');
+            });
+    });
+    $(document).on('change input', '#address-title-input, #address-input, #network-select', function () {
+        $('.alert').remove();
+    });
+    $(document).on('click', '.address-item-btn', function() {
+        var btn = $(this);
+        var address = btn.attr('data-address');
+        var chain = btn.attr('data-chain');
+        var title = btn.find('.title').text();
+        var shortAddress = btn.attr('data-short-address');
+        $('#main-section .empty-state').hide();
+        $('#main-section .main-content').before('<div class="loader m-auto"><svg role="img" class="animate-spin w-10 h-10"><use xlink:href="/img/sprite.svg#icon-loader"></use></svg></div>');
+        btn.addClass('active');
+        $.get('/AddressBalancePartial?address=' + address + '&chainId=' + chain)
+            .done(function (data) {
+                $('#main-section .main-content .inject-here').html(data);
+                $('#main-section .main-content .address-label').text(title);
+                $('#main-section .main-content .address-short').text(shortAddress);
+                $('#main-section .main-content').show();
+                $('#main-section .loader').remove();
+            })
+            .fail(function () {
+                $('#main-section .main-content').html('<div class="alert alert-error">There has been an error, please try again.</div>');
+                $('#main-section .loader').remove();
+                btn.removeClass('active');
+            });
+    })
+</script>
 }
