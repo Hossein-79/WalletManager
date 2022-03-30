@@ -122,7 +122,7 @@ namespace WalletManager.Controllers
                 }
             }
 
-            balances = balances.OrderBy(u => u.Value * u.CoinPrice?.Price);
+            balances = balances.OrderByDescending(u => u.Value * u.CoinPrice?.Price);
             return Json(new { Success = true, Message = new { balances, Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price) } });
         }
 
@@ -153,7 +153,7 @@ namespace WalletManager.Controllers
                 }
             }
 
-            balances = balances.OrderBy(u => u.Value * u.CoinPrice?.Price);
+            balances = balances.OrderByDescending(u => u.Value * u.CoinPrice?.Price);
             return PartialView("_AddressBalancePartial", balances);
         }
 
@@ -236,7 +236,7 @@ namespace WalletManager.Controllers
 
             var model = new WalletPreviewViewModel()
             {
-                Balances = balances.OrderBy(u => u.Value * u.CoinPrice?.Price).Take(3),
+                Balances = balances.OrderByDescending(u => u.Value * u.CoinPrice?.Price).Take(3),
                 CoinCount = balances.Count(),
                 Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price)
             };
