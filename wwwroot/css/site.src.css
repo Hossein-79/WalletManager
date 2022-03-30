@@ -95,7 +95,7 @@
     .list-child {
         @apply block border-l border-r border-neutral-200 dark:border-neutral-500 w-full select-none transition-colors px-3 py-3;
     }
-    .list-child:hover {
+    .list-child:not(.no-hover):hover {
         @apply bg-neutral-100/50 dark:bg-neutral-600/50;
     }
     .list-child:active {

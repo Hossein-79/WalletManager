@@ -1,13 +1,17 @@
 ﻿@model IEnumerable<Balance>
-
+@{
+    var totalBalance = Model.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price);
+}
 <div>
     @if (Model.Count() > 0)
     {
         <div class="mb-4">
-            <h3 class="text-sm">Tokens</h3>
+            <div class="flex items-center justify-between">
+                <h3 class="text-sm">Tokens</h3>
+                <small>$@(totalBalance.ToString("N2")) in total</small>
+            </div>
             <div class="rounded-lg overflow-hidden flex h-3 my-2">
                 @{
-                    var totalBalance = Model.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price);
                     var tokenCount = 0;
                     decimal accPercentage = 0;
                     foreach (var token in Model)
@@ -88,7 +92,7 @@
         <div>
             @foreach (var token in Model)
             {
-                <button class="list-child flex items-center" type="button">
+                <div class="list-child no-hover flex items-center">
                     <img src="@(token.LogoUrl)" alt="@(token.ContractName)"
                 class="block rounded-full w-10 h-10 mr-3"
                 onerror="this.onerror=null;this.src='/img/placeholder.png';">
@@ -108,10 +112,7 @@
                             }
                         }
                     </div>
-                    <svg role="img" class="arrow-icon ml-3 w-6 h-6">
-                        <use xlink:href="/img/sprite.svg#icon-chevron-right"></use>
-                    </svg>
-                </button>
+                </div>
             }
         </div>
     }
