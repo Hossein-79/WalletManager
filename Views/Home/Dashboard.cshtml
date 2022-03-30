@@ -5,7 +5,7 @@
 <div class="lg:grid lg:grid-cols-4 lg:h-screen">
     <section class="lg:col-start-1 lg:col-end-2 lg:flex lg:flex-col lg:bg-white lg:dark:bg-neutral-700 lg:shadow-sm">
         @* DESKTOP LOGO *@
-        <header class="hidden lg:block lg:sticky top-0 border-b border-neutral-300 dark:border-neutral-500 lg:bg-white lg:dark:bg-neutral-700 px-4 py-6">
+        <header class="hidden lg:block border-b border-neutral-300 dark:border-neutral-500 lg:bg-white lg:dark:bg-neutral-700 px-4 py-6">
             <a href="/">
                 <svg role="img" class="h-8 w-44 text-slate-600 dark:text-slate-100">
                     <use xlink:href="/img/sprite.svg#logotype"></use>
@@ -101,14 +101,22 @@
         <div class="main-content bg-white dark:bg-neutral-700 rounded-lg p-4 mt-5 lg:m-5" style="display: none;">
             <div class="flex justify-between items-start mb-4">
                 <div class="flex-shrink">
-                    <h2 class="address-label"></h2>
-                    <small class="address-short text-neutral-400 break-all"></small>
+                    <h2 class="address-label text-lg font-medium"></h2>
+                    <div class="">
+                        <small class="address-short text-neutral-400 break-all"></small>
+                        <button type="button" id="copy-address-btn" class="text-neutral-400 hover:text-neutral-500 active:text-neutral-600 align-sub ml-1">
+                            <svg role="img" class="h-5 w-5 lg:h-3 lg:w-3">
+                                <use xlink:href="/img/sprite.svg#icon-clipboard"></use>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <button type="button" class="btn-icon flex-shrink-0 ml-5" id="close-address">
+                @* <button type="button" class="btn-icon flex-shrink-0 ml-5" id="close-address">
                     <svg role="img" class="h-5 w-5">
                         <use xlink:href="/img/sprite.svg#icon-x"></use>
                     </svg>
-                </button>
+                </button> *@
+                <button type="button" id="remove-wallet" class="transition-colors border border-neutral-400 hover:bg-neutral-100 rounded-md text-neutral-400 text-sm flex-shrink-0 disabled:pointer-events-none ml-5 px-2 py-1">Remove</button>
             </div>
             <div class="inject-here"></div>
         </div>
@@ -278,6 +286,7 @@
         var chain = btn.attr('data-chain');
         var title = btn.find('.title').text();
         var shortAddress = btn.attr('data-address');
+        var walletId = btn.attr('data-wallet-id');
         $('#main-section .empty-state').hide();
         $('#main-section .main-content').before('<div class="loader mt-5 m-auto lg:mt-auto"><svg role="img" class="animate-spin w-10 h-10"><use xlink:href="/img/sprite.svg#icon-loader"></use></svg></div>');
         btn.addClass('active');
@@ -287,6 +296,7 @@
                     $('#main-section .main-content .inject-here').html(data);
                     $('#main-section .main-content .address-label').text(title);
                     $('#main-section .main-content .address-short').text(shortAddress);
+                    $('#remove-wallet').attr('data-wallet-id', walletId);
                     $('#main-section .main-content').show();
                     $('#main-section .loader').remove();
                 }
@@ -297,6 +307,41 @@
                 btn.removeClass('active');
             });
     });
-    $(document).on('click', '#close-address', closeAddress);
+    @* $(document).on('click', '#close-address', closeAddress); *@
+    $(document).on('click', '#remove-wallet', function() {
+        var btn = $(this);
+        var walletId = btn.attr('data-wallet-id');
+        btn.text('Removing...').attr('disabled', 'disabled');
+        $.get('/DeleteAddress?walletAddressId=' + walletId)
+            .done(function (data) {
+                if (data.success) {
+                    closeAddress();
+                    $('.address-item-btn[data-wallet-id="' + walletId + '"]').remove();
+                    btn.text('Remove').removeAttr('disabled');
+                } else {
+                    btn.text('ERROR!');
+                    setTimeout(function () {
+                        btn.text('Remove').removeAttr('disabled');
+                    }, 3000);
+                }
+            })
+            .fail(function () {
+                btn.text('ERROR!');
+                setTimeout(function () {
+                    btn.text('Remove').removeAttr('disabled');
+                }, 3000);
+            });
+    });
+    function copyToClipboard(element) {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(element).text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+    $(document).on('click', '#copy-address-btn', function() {
+        var address = $('#main-section .main-content .address-short');
+        copyToClipboard(address);
+    });
 </script>
 }
