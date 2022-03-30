@@ -28,5 +28,11 @@ namespace WalletManager.Services
 
         public async Task<IEnumerable<WalletAddress>> GetUserWallets(int userId) =>
             await _context.WalletAddresses.Where(u => u.UserId == userId).Include(u => u.Chain).ToListAsync();
+
+        public async Task Delete(WalletAddress walletAddress)
+        {
+            _context.Remove(walletAddress);
+            await _context.SaveChangesAsync();
+        }
     }
 }

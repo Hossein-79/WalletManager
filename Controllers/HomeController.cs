@@ -95,37 +95,6 @@ namespace WalletManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> AddressBalance(string address, string chainId)
-        {
-            var balances = await _covalentService.GetAddressBalance(address, chainId);
-
-            foreach (var item in balances ?? Enumerable.Empty<Balance>())
-            {
-                item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
-
-                if (item.CoinPrice is null)
-                {
-                    var price = await _covalentService.GetPrice(item.Symbol);
-
-                    if (price != 0)
-                    {
-                        var coinPrice = new CoinPrice
-                        {
-                            Symbol = item.Symbol,
-                            Price = price,
-                            ContractAddress = item.ContractAddress,
-                            LastUpdateTime = DateTime.UtcNow,
-                        };
-                        item.CoinPrice = coinPrice;
-                        await _coinPriceService.Add(coinPrice);
-                    }
-                }
-            }
-
-            balances = balances.OrderByDescending(u => u.Value * u.CoinPrice?.Price);
-            return Json(new { Success = true, Message = new { balances, Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price) } });
-        }
-
         public async Task<IActionResult> AddressBalancePartial(string address, string chainId)
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
@@ -164,6 +133,24 @@ namespace WalletManager.Controllers
             await _walletAddressService.Add(walletAddress);
 
             return PartialView("_AddressListItemPartial", walletAddress);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> DeleteAddress(int walletAddressId)
+        {
+            var user = await _userService.GetUser(User.Identity.Name);
+
+            var wallet = await _walletAddressService.GetWalletAddress(walletAddressId);
+
+            if (wallet == null)
+                return Json(new { Success = false, Message = "Wallet not Found." });
+
+            if (wallet.UserId != user.UserId)
+                return Json(new { Success = false, Message = "Wallet not Found." });
+
+            await _walletAddressService.Delete(wallet);
+
+            return Json(new { Success = true, Message = "Deleted Successful" });
         }
 
         public async Task<IActionResult> GetAllChains(bool update = false)
