@@ -130,27 +130,11 @@ namespace WalletManager.Controllers
         {
             var balances = await _covalentService.GetAddressBalance(address, chainId);
 
+            var coinPrices = await _coinPriceService.GetAllCoins();
+
             foreach (var item in balances ?? Enumerable.Empty<Balance>())
             {
-                item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
-
-                if (item.CoinPrice is null)
-                {
-                    var price = await _covalentService.GetPrice(item.Symbol);
-
-                    if (price != 0)
-                    {
-                        var coinPrice = new CoinPrice
-                        {
-                            Symbol = item.Symbol,
-                            Price = price,
-                            ContractAddress = item.ContractAddress,
-                            LastUpdateTime = DateTime.UtcNow,
-                        };
-                        item.CoinPrice = coinPrice;
-                        await _coinPriceService.Add(coinPrice);
-                    }
-                }
+                item.CoinPrice = coinPrices.Where(u => u.Symbol == item.Symbol).FirstOrDefault();
             }
 
             balances = balances.OrderByDescending(u => u.Value * u.CoinPrice?.Price);
@@ -211,9 +195,11 @@ namespace WalletManager.Controllers
             if (balances is null)
                 return PartialView("_WalletPreviewPartial");
 
+            var coinPrices = await _coinPriceService.GetAllCoins();
+
             foreach (var item in balances)
             {
-                item.CoinPrice = await _coinPriceService.GetCoinPrice(item.Symbol);
+                item.CoinPrice = coinPrices.Where(u => u.Symbol == item.Symbol).FirstOrDefault();
 
                 if (item.CoinPrice is null)
                 {
@@ -240,7 +226,7 @@ namespace WalletManager.Controllers
                 CoinCount = balances.Count(),
                 Total = balances.Where(u => u.CoinPrice != null).Sum(u => u.Value * u.CoinPrice.Price),
                 FirstActivity = await _covalentService.GetWalletFirstActivity(address, chainId)
-        };
+            };
 
             return PartialView("_WalletPreviewPartial", model);
         }

@@ -94,14 +94,14 @@
                 onerror="this.onerror=null;this.src='/img/placeholder.png';">
                     <div class="flex flex-col text-left">
                         <span>@(token.ContractName)</span>
-                        <small class="text-sm font-light text-neutral-400">$@(token.CoinPrice.Price.ToString("N2"))</small>
+                        <small class="text-sm font-light text-neutral-400">$@(token.CoinPrice?.Price.ToString("N2"))</small>
                     </div>
                     <div class="flex flex-col text-right ml-auto">
                         <span>
                             @(token.Value > 0 ? token.Value.ToString("N2") : 0) @(token.Symbol)
                         </span>
                         @{
-                            var tokenBalance = token.Value * token.CoinPrice.Price;
+                            var tokenBalance = token.Value * (token.CoinPrice != null ? token.CoinPrice.Price : 0);
                             if (tokenBalance > 0)
                             {
                                 <small class="text-sm font-light text-neutral-400">$@(tokenBalance.ToString("N2"))</small>
