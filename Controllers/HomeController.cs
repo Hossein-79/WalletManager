@@ -179,8 +179,7 @@ namespace WalletManager.Controllers
 
             await _walletAddressService.Add(walletAddress);
 
-            var balances = await _covalentService.GetAddressBalance(address, chain.CovalentId);
-            return Json(new { Success = true, Message = balances });
+            return PartialView("_AddressListItemPartial", walletAddress);
         }
 
         public async Task<IActionResult> GetAllChains(bool update = false)
