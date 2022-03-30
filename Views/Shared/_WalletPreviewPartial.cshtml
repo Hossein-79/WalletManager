@@ -16,7 +16,7 @@
             foreach (var coin in Model.Balances)
             {
                 <div>
-                    <img src="@(coin.LogoUrl)" alt="@(coin.ContractName)" class="rounded-full w-10 h-10 mr-1" onerror="this.onerror=null;this.src='default-image.jpg';">
+                    <img src="@(coin.LogoUrl)" alt="@(coin.ContractName)" class="rounded-full w-10 h-10 mr-1" onerror="this.onerror=null;this.src='/img/placeholder.png';">
                 </div>
             }
             if (Model.CoinCount > 3)

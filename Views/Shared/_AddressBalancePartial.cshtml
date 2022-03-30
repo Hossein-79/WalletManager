@@ -3,7 +3,7 @@
 <div>
     @if (Model.Count() > 0)
     {
-        <div>
+        <div class="mb-4">
             <h3 class="text-sm">Tokens</h3>
             <div class="rounded-lg overflow-hidden flex h-3 my-2">
                 @{
@@ -16,7 +16,7 @@
                         var CoinBalance = token.Value * token.CoinPrice.Price;
                         var percentage = (CoinBalance * 100) / totalBalance;
                         var color = "";
-                        if(tokenCount < 4) accPercentage += percentage;
+                        if (tokenCount < 4) accPercentage += percentage;
                         if (tokenCount == 1)
                         {
                             color = "bg-pink-200";
@@ -53,7 +53,7 @@
                         var percentage2 = (CoinBalance2 * 100) / totalBalance;
                         var color2 = "";
                         var tokenName = token.ContractName;
-                        if(tokenCount2 < 4) accPercentage2 += percentage2;
+                        if (tokenCount2 < 4) accPercentage2 += percentage2;
                         if (tokenCount2 == 1)
                         {
                             color2 = "bg-pink-200";
@@ -85,21 +85,40 @@
                 }
             </div>
         </div>
+        <div>
+            @foreach (var token in Model)
+            {
+                <button class="list-child flex items-center" type="button">
+                    <img src="@(token.LogoUrl)" alt="@(token.ContractName)"
+                class="block dark:brightness-150 rounded-full w-10 h-10 mr-3"
+                onerror="this.onerror=null;this.src='/img/placeholder.png';">
+                    <div class="flex flex-col text-left">
+                        <span>@(token.ContractName)</span>
+                        <small class="text-sm font-light text-neutral-400">$@(token.CoinPrice.Price.ToString("N2"))</small>
+                    </div>
+                    <div class="flex flex-col text-right ml-auto">
+                        <span>
+                            @(token.Value > 0 ? token.Value.ToString("N2") : 0) @(token.Symbol)
+                        </span>
+                        @{
+                            var tokenBalance = token.Value * token.CoinPrice.Price;
+                            if (tokenBalance > 0)
+                            {
+                                <small class="text-sm font-light text-neutral-400">$@(tokenBalance.ToString("N2"))</small>
+                            }
+                        }
+                    </div>
+                    <svg role="img" class="arrow-icon ml-3 w-6 h-6">
+                        <use xlink:href="/img/sprite.svg#icon-chevron-right"></use>
+                    </svg>
+                </button>
+            }
+        </div>
     }
     else
     {
         <div class="text-center">
             <h3 class="text-sm">No tokens found</h3>
         </div>
-    }
-    @foreach (var item in Model)
-    {
-        <ul>
-            <li>ContractName: @(item.ContractName)</li>
-            <li>CoinPrice: @(item.CoinPrice)</li>
-            <li>LogoUrl: @(item.LogoUrl)</li>
-            <li>Symbol: @(item.Symbol)</li>
-            <li>Value: @(item.Value)</li>
-        </ul>
     }
 </div>

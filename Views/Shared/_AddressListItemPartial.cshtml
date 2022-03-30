@@ -1,7 +1,7 @@
 @model WalletAddress
 
 <button class="address-item-btn list-child flex items-center" type="button" data-address="@(Model.Address)" data-chain="@(Model.ChainId)" data-short-address="@(Model.Address.ShortenAddress())">
-    <img src="@(Model.Chain.LogoUrl)" alt="@(Model.Chain.Name)" class="block dark:brightness-150 w-6 h-6 mr-3">
+    <img src="@(Model.Chain.LogoUrl)" alt="@(Model.Chain.Name)" class="block dark:brightness-150 w-6 h-6 mr-3" onerror="this.onerror=null;this.src='/img/placeholder.png';">
     <span class="title">
         @(Model.Label != null ? Model.Label : Model.Address.ShortenAddress())
     </span>

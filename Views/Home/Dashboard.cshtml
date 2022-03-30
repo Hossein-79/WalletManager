@@ -104,7 +104,7 @@
                     <h2 class="address-label"></h2>
                     <small class="address-short text-neutral-400"></small>
                 </div>
-                <button type="button" class="btn-icon modal-close">
+                <button type="button" class="btn-icon" id="close-address">
                     <svg role="img" class="h-5 w-5">
                         <use xlink:href="/img/sprite.svg#icon-x"></use>
                     </svg>
@@ -263,6 +263,7 @@
         $('.alert').remove();
     });
     $(document).on('click', '.address-item-btn', function() {
+        $('.address-item-btn').removeClass('active');
         var btn = $(this);
         var address = btn.attr('data-address');
         var chain = btn.attr('data-chain');
@@ -284,6 +285,14 @@
                 $('#main-section .loader').remove();
                 btn.removeClass('active');
             });
-    })
+    });
+    $(document).on('click', '#close-address', function() {
+        $('.address-item-btn').removeClass('active');
+        $('#main-section .main-content').hide();
+        $('#main-section .main-content .inject-here').html('');
+        $('#main-section .main-content .address-label').text('');
+        $('#main-section .main-content .address-short').text('');
+        $('#main-section .empty-state').show();
+    });
 </script>
 }
