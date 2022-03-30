@@ -696,7 +696,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   left: 0px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   overflow-y: auto;
   background-color: rgb(0 0 0 / 0.3);
   padding: 1rem;
@@ -715,10 +714,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 @media (min-width: 1024px){
   .modal{
     align-items: center;
-  }
-
-  .modal{
-    justify-content: center;
   }
 }
 
@@ -741,6 +736,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .modal .modal-body{
+  margin-top: auto;
   border-radius: 0.5rem;
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
@@ -756,6 +752,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 @media (min-width: 1024px){
+  .modal .modal-body{
+    margin: auto;
+  }
+
   .modal .modal-body{
     width: 33.333333%;
   }
@@ -1005,6 +1005,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-left: 0.5rem;
 }
 
+.ml-5{
+  margin-left: 1.25rem;
+}
+
 .block{
   display: block;
 }
@@ -1077,6 +1081,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 0.75rem;
 }
 
+.flex-shrink-0{
+  flex-shrink: 0;
+}
+
+.flex-shrink{
+  flex-shrink: 1;
+}
+
 @-webkit-keyframes spin{
   to{
     transform: rotate(360deg);
@@ -1144,6 +1156,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .overflow-hidden{
   overflow: hidden;
+}
+
+.break-all{
+  word-break: break-all;
 }
 
 .rounded-lg{
@@ -1444,6 +1460,10 @@ body {
   .lg\:my-7{
     margin-top: 1.75rem;
     margin-bottom: 1.75rem;
+  }
+
+  .lg\:mt-auto{
+    margin-top: auto;
   }
 
   .lg\:mr-7{
