@@ -111,10 +111,10 @@ namespace WalletManager.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> AddAddress(string address, int chainId, string lable)
+        public async Task<IActionResult> AddAddress(string address, string chainId, string lable)
         {
             var user = await _userService.GetUser(User.Identity.Name);
-            var chain = await _chainService.GetChain(chainId);
+            var chain = await _chainService.GetChainByCovalentId(chainId);
 
             if (user is null)
                 return Json(new { Success = false, Message = "User not found." });
