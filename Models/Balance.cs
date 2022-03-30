@@ -24,6 +24,8 @@ namespace WalletManager.Models
 
         public string LogoUrl { get; set; }
 
+        public bool IsDust { get; set; }
+
         [NotMapped]
         public CoinPrice CoinPrice { get; set; }
     }

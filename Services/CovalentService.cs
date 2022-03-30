@@ -261,6 +261,7 @@ namespace WalletManager.Services
                             Symbol = item.contract_ticker_symbol,
                             Type = item.type,
                             Value = decimal.Parse(item.balance) / (decimal)Math.Pow(10, item.contract_decimals),
+                            IsDust = item.type == "dust",
                         };
                         balances.Add(balance);
                     }
