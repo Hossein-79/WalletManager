@@ -8,11 +8,11 @@ View online demo at [https://multichain.liara.run](https://multichain.liara.run)
 
 ### Mobile screenshots
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between">
-  <img src="readme/01.png" alt="1-mobile" width="19%" />
-  <img src="readme/02.png" alt="2-mobile" width="19%" />
-  <img src="readme/03.png" alt="3-mobile" width="19%" />
-  <img src="readme/04.png" alt="4-mobile" width="19%" />
-  <img src="readme/05.png" alt="5-mobile" width="19%" />
+  <img src="readme/1.png" alt="1-mobile" width="19%" />
+  <img src="readme/2.png" alt="2-mobile" width="19%" />
+  <img src="readme/3.png" alt="3-mobile" width="19%" />
+  <img src="readme/4.png" alt="4-mobile" width="19%" />
+  <img src="readme/5.png" alt="5-mobile" width="19%" />
 </div>
 
 ### Desktop screenshot
